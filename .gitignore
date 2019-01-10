@@ -10,4 +10,4 @@
 .gradletasknamecache
 .gradle/
 build/
-bin/
+out/

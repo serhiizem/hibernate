@@ -29,6 +29,7 @@ allprojects {
         compile "org.springframework.boot:spring-boot-starter-web"
         compile "org.springframework.boot:spring-boot-starter-data-jpa"
         compile "org.postgresql:postgresql:9.4-1206-jdbc42"
+        compile 'org.projectlombok:lombok:1.16.14'
 
         testCompile "org.junit.jupiter:junit-jupiter-engine:5.3.2"
         testCompile 'org.springframework.boot:spring-boot-starter-test'
