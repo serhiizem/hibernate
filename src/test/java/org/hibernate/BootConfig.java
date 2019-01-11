@@ -1,4 +1,4 @@
-package org.hibernate.tutorials;
+package org.hibernate;
 
 import org.springframework.boot.SpringBootConfiguration;
 

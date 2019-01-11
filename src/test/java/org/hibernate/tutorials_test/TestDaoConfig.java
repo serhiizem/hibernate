@@ -1,4 +1,4 @@
-package org.hibernate.tutorials.dao;
+package org.hibernate.tutorials_test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -40,7 +40,7 @@ public class TestDaoConfig {
                 new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource);
         entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        entityManagerFactoryBean.setPackagesToScan("telecom.model");
+        entityManagerFactoryBean.setPackagesToScan("org.hibernate.tutorials.model");
 
         Properties jpaProperties = new Properties();
         jpaProperties.put("hibernate.jdbc.lob.non_contextual_creation", true);

@@ -1,15 +1,13 @@
 package org.hibernate.tutorials.model;
 
+import lombok.Getter;
+
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
+@Getter
 @Entity
 @Table(name = "ORDERS")
-public class Order {
-    @Id
-    @GeneratedValue(generator = "ID_GENERATOR")
-    private Long id;
+public class Order extends PersistentEntity {
     private String name;
 }
