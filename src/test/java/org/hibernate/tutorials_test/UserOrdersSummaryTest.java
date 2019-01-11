@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions;
 public class UserOrdersSummaryTest extends AbstractDaoTest {
 
     @Test
-    public void shouldFindAllTheExistingRegions() {
+    public void shouldFindUserOrdersSummary() {
         //given
         UserOrderSummary userOrders = em.find(UserOrderSummary.class, 1L);
 
