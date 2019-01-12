@@ -47,7 +47,7 @@ public class TestDaoConfig {
         jpaProperties.put("hibernate.hbm2ddl.auto", "update");
         String currentContextClass =
                 ofNullable(env.getProperty("spring.jpa.properties.hibernate.current_session_context_class"))
-                .orElse("org.springframework.orm.hibernate5.SpringSessionContext");
+                        .orElse("org.springframework.orm.hibernate5.SpringSessionContext");
         jpaProperties.put("hibernate.current_session_context_class", currentContextClass);
         entityManagerFactoryBean.setJpaProperties(jpaProperties);
 
