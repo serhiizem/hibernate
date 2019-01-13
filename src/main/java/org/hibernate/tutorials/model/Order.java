@@ -9,7 +9,8 @@ import javax.persistence.Table;
 @Getter
 @Entity
 @Table(name = "ORDERS")
-public class Order extends PersistentEntity {
+public class
+Order extends PersistentEntity {
     private String name;
     @Formula("SUBSTRING(DESCRIPTION,0,10) || '...'")
     private String shortDescription;
