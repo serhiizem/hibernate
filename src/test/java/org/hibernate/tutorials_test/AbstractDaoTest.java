@@ -5,11 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 
 @JdbcTest
 @ContextConfiguration(classes = TestDaoConfig.class)
@@ -17,10 +18,9 @@ import javax.persistence.EntityManagerFactory;
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 public abstract class AbstractDaoTest {
 
+    @PersistenceContext
     protected EntityManager em;
 
     @Autowired
-    public void defineEntityManager(EntityManagerFactory emf) {
-        this.em = emf.createEntityManager();
-    }
+    protected JdbcTemplate jdbcTemplate; //for direct db access without hibernate
 }

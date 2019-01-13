@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Getter
 @Entity
-@Table(name = "SYS_USER")
+@Table(name = "USERS")
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends PersistentEntity {
@@ -19,6 +19,7 @@ public class User extends PersistentEntity {
 
     @Column(name = "CARD_NUMBER")
     @ColumnTransformer(
+            read = "pgp_sym_decrypt(creditCardNumber, 'mySecretKey')",
             write = "pgp_sym_encrypt(?, 'mySecretKey')"
     )
     private String creditCardNumber;
