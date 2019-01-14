@@ -14,6 +14,9 @@ public class Request extends PersistentEntity {
 
     private String description;
 
+    @Enumerated(value = EnumType.STRING)
+    private RequestStatus status;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "LAST_MODIFIED_DATE", insertable = false, updatable = false)
     @Generated(GenerationTime.ALWAYS)
@@ -26,8 +29,9 @@ public class Request extends PersistentEntity {
     @Generated(GenerationTime.INSERT)
     private Date creationDate; //old java.util.Date is used only for sake of studying @Temporal
 
-    public Request(String description) {
+    public Request(String description, RequestStatus status) {
         this.description = description;
+        this.status = status;
     }
 
     public void setDescription(String description) {

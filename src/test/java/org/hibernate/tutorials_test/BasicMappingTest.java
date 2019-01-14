@@ -7,8 +7,8 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import static org.hibernate.TestConstants.JdbcUtils.GET_USER_BY_ID_STATEMENT;
-import static org.hibernate.TestConstants.JdbcUtils.USER_MAPPER;
+import static org.hibernate.TestConstants.JdbcUtils.*;
+import static org.hibernate.tutorials.model.RequestStatus.PROCESSING;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BasicMappingTest extends AbstractDaoTest {
@@ -40,7 +40,7 @@ public class BasicMappingTest extends AbstractDaoTest {
 
     @Test
     public void shouldGenerateCreationDateTimestamp() {
-        Request request = new Request("Test Request Description");
+        Request request = new Request("Test Description", PROCESSING);
 
         em.persist(request);
         em.flush();
@@ -50,7 +50,7 @@ public class BasicMappingTest extends AbstractDaoTest {
 
     @Test
     public void shouldUpdateLastModifiedDateOnDescriptionUpdate() {
-        Request request = new Request("Test description");
+        Request request = new Request("Test description", PROCESSING);
 
         em.persist(request);
         em.flush();
@@ -62,5 +62,21 @@ public class BasicMappingTest extends AbstractDaoTest {
 
         assertNull(modifiedDateBeforeDescriptionModification);
         assertNotNull(request.getLastModifiedDate());
+    }
+
+    @Test
+    public void shouldStoreEnumValueAsString() {
+        Request request = new Request("Test description", PROCESSING);
+
+        em.persist(request);
+        em.flush();
+
+        Request requestFromJdbc = jdbcTemplate.queryForObject(
+                GET_REQUEST_BY_ID_STATEMENT,
+                new Object[]{request.getId()},
+                REQUEST_MAPPER);
+
+        //noinspection ConstantConditions
+        assertEquals(request.getStatus(), requestFromJdbc.getStatus());
     }
 }
