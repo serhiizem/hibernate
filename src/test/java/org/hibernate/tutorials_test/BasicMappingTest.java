@@ -1,14 +1,12 @@
 package org.hibernate.tutorials_test;
 
 import org.hibernate.tutorials.model.Order;
-import org.hibernate.tutorials.model.Request;
 import org.hibernate.tutorials.model.User;
 import org.junit.Test;
 
 import java.util.Date;
 
-import static org.hibernate.TestConstants.DEFAULT_TEST_REQUEST;
-import static org.hibernate.TestConstants.JdbcUtils.*;
+import static org.hibernate.JdbcUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BasicMappingTest extends AbstractDaoTest {
@@ -40,8 +38,6 @@ public class BasicMappingTest extends AbstractDaoTest {
 
     @Test
     public void shouldGenerateCreationDateTimestamp() {
-        Request request = em.merge(DEFAULT_TEST_REQUEST);
-
         em.persist(request);
         em.flush();
 
@@ -50,8 +46,6 @@ public class BasicMappingTest extends AbstractDaoTest {
 
     @Test
     public void shouldUpdateLastModifiedDateOnDescriptionUpdate() {
-        Request request = em.merge(DEFAULT_TEST_REQUEST);
-
         em.persist(request);
         em.flush();
         Date modifiedDateBeforeDescriptionModification = request.getLastModifiedDate();
@@ -66,8 +60,6 @@ public class BasicMappingTest extends AbstractDaoTest {
 
     @Test
     public void shouldStoreEnumValueAsString() {
-        Request request = em.merge(DEFAULT_TEST_REQUEST);
-
         em.persist(request);
         em.flush();
 
