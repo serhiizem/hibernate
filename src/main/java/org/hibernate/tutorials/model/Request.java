@@ -1,6 +1,7 @@
 package org.hibernate.tutorials.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
@@ -10,6 +11,7 @@ import java.util.Date;
 @Getter
 @Entity
 @Table(name = "REQUESTS")
+@NoArgsConstructor
 public class Request extends PersistentEntity {
 
     private String description;
@@ -29,9 +31,27 @@ public class Request extends PersistentEntity {
     @Generated(GenerationTime.INSERT)
     private Date creationDate; //old java.util.Date is used only for sake of studying @Temporal
 
-    public Request(String description, RequestStatus status) {
+    @AttributeOverrides({
+            @AttributeOverride(
+                    name = "street",
+                    column = @Column(name = "FROM_STREET", nullable = false)),
+            @AttributeOverride(
+                    name = "zipCode",
+                    column = @Column(name = "FROM_ZIP_CODE", nullable = false)),
+            @AttributeOverride(
+                    name = "city",
+                    column = @Column(name = "FROM_CITY", nullable = false))
+    })
+    private Address fromAddress;
+
+    private Address deliveryAddress;
+
+    public Request(String description, RequestStatus status,
+                   Address fromAddress, Address deliveryAddress) {
         this.description = description;
         this.status = status;
+        this.fromAddress = fromAddress;
+        this.deliveryAddress = deliveryAddress;
     }
 
     public void setDescription(String description) {
