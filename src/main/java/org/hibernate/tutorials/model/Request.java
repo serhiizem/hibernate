@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import org.hibernate.tutorials.model.converters.MonetaryAmountConverter;
+import org.hibernate.tutorials.model.payments.MonetaryAmount;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -46,12 +48,22 @@ public class Request extends PersistentEntity {
 
     private Address deliveryAddress;
 
+    @Convert(converter = MonetaryAmountConverter.class)
+    private MonetaryAmount price;
+
     public Request(String description, RequestStatus status,
-                   Address fromAddress, Address deliveryAddress) {
+                   Address fromAddress, Address deliveryAddress,
+                   MonetaryAmount price) {
         this.description = description;
         this.status = status;
         this.fromAddress = fromAddress;
         this.deliveryAddress = deliveryAddress;
+        this.price = price;
+    }
+
+    public Request(Request request) {
+        this(request.getDescription(), request.getStatus(), request.getFromAddress(),
+                request.getDeliveryAddress(), request.getPrice());
     }
 
     public void setDescription(String description) {
