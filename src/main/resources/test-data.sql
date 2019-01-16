@@ -1,6 +1,6 @@
-INSERT INTO users (id, username, card_number) VALUES (1, 'User#1', null);
-INSERT INTO users (id, username, card_number) VALUES (2, 'User#2', null);
-INSERT INTO users (id, username, card_number) VALUES (3, 'User#3', null);
+INSERT INTO users (id, card_number, user_name) VALUES (1, 'User#1', null);
+INSERT INTO users (id, card_number, user_name) VALUES (2, 'User#2', null);
+INSERT INTO users (id, card_number, user_name) VALUES (3, 'User#3', null);
 
 ALTER TABLE orders
   ADD COLUMN

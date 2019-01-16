@@ -1,4 +1,4 @@
-package org.hibernate.tutorials_test;
+package org.hibernate.tutorials;
 
 import org.hibernate.tutorials.model.Address;
 import org.hibernate.tutorials.model.Request;

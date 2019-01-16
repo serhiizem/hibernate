@@ -1,4 +1,4 @@
-package org.hibernate.tutorials_test;
+package org.hibernate.tutorials;
 
 import org.hibernate.tutorials.model.Address;
 import org.hibernate.tutorials.model.Request;
@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -20,8 +20,7 @@ import java.math.BigDecimal;
 
 import static org.hibernate.tutorials.model.RequestStatus.PROCESSING;
 
-@JdbcTest
-@ContextConfiguration(classes = TestDaoConfig.class)
+@DataJpaTest
 @RunWith(SpringRunner.class)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 public abstract class AbstractDaoTest {

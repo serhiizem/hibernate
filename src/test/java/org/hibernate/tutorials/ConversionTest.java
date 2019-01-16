@@ -1,4 +1,4 @@
-package org.hibernate.tutorials_test;
+package org.hibernate.tutorials;
 
 import org.junit.Test;
 
