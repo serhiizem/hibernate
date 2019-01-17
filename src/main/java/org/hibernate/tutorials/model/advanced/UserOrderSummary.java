@@ -13,7 +13,7 @@ import javax.persistence.Id;
 @Immutable
 @Subselect(value =
         //@formatter:off
-        "SELECT u.ID AS ID, u.USER_NAME AS USERNAME, COUNT(o.ID) AS NUMBEROFORDERS " +
+        "SELECT u.ID AS ID, u.USER_NAME AS USER_NAME, COUNT(o.ID) AS NUMBER_OF_ORDERS " +
         "FROM users u LEFT JOIN orders o " +
         "ON u.id = o.user_id " +
         "GROUP BY u.ID, u.USER_NAME"
