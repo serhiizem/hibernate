@@ -1,6 +1,6 @@
-INSERT INTO users (id, card_number, user_name) VALUES (1, 'User#1', null);
-INSERT INTO users (id, card_number, user_name) VALUES (2, 'User#2', null);
-INSERT INTO users (id, card_number, user_name) VALUES (3, 'User#3', null);
+INSERT INTO users (id, user_name) VALUES (1, 'User#1');
+INSERT INTO users (id, user_name) VALUES (2, 'User#2');
+INSERT INTO users (id, user_name) VALUES (3, 'User#3');
 
 ALTER TABLE orders
   ADD COLUMN
@@ -13,8 +13,8 @@ ALTER TABLE orders
   ADD CONSTRAINT orders_user_fk
 FOREIGN KEY (user_id) REFERENCES users;
 
-INSERT INTO public.orders (id, name, user_id, description) VALUES (3, 'ORDER#3', 1, null);
-INSERT INTO public.orders (id, name, user_id, description) VALUES (5, 'ORDER#5', 2, null);
+INSERT INTO public.orders (id, name, user_id, description) VALUES (3, 'ORDER#3', 1, NULL);
+INSERT INTO public.orders (id, name, user_id, description) VALUES (5, 'ORDER#5', 2, NULL);
 INSERT INTO public.orders (id, name, user_id, description) VALUES (1, 'ORDER#1', 1,
                                                                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
 INSERT INTO public.orders (id, name, user_id, description) VALUES (2, 'ORDER#2', 1,
@@ -34,6 +34,6 @@ $BODY$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER request_description_update_trigger
-  BEFORE UPDATE OF description
+BEFORE UPDATE OF description
   ON requests
-  FOR EACH ROW EXECUTE PROCEDURE update_request_last_modified_date_function();
+FOR EACH ROW EXECUTE PROCEDURE update_request_last_modified_date_function();
