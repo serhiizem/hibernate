@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.util.Currency;
 
 @Getter
 @AllArgsConstructor
@@ -17,7 +18,7 @@ public class MonetaryAmount {
         String currencyName = parts[1];
         return new MonetaryAmount(
                 value,
-                Currency.fromString(currencyName)
+                Currency.getInstance(currencyName)
         );
     }
 

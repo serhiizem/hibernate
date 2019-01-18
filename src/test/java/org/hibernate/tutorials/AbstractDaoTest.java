@@ -2,7 +2,6 @@ package org.hibernate.tutorials;
 
 import org.hibernate.tutorials.model.Address;
 import org.hibernate.tutorials.model.Request;
-import org.hibernate.tutorials.model.payments.Currency;
 import org.hibernate.tutorials.model.payments.MonetaryAmount;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -11,12 +10,12 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
+import java.util.Currency;
 
 import static org.hibernate.tutorials.model.RequestStatus.PROCESSING;
 
@@ -30,7 +29,7 @@ public abstract class AbstractDaoTest {
     private static final Address DEFAULT_FROM_ADDRESS =
             new Address("Street #1111", "6235", "City #11");
     private static final MonetaryAmount PRICE = new MonetaryAmount(
-            new BigDecimal("15.0"), Currency.EUR);
+            new BigDecimal("15.0"), Currency.getInstance("USD"));
 
     private static final Request DEFAULT_TEST_REQUEST =
             new Request("Test description", PROCESSING,
