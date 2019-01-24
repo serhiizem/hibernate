@@ -1,7 +1,7 @@
 package org.hibernate.tutorials;
 
 import org.hibernate.tutorials.model.Address;
-import org.hibernate.tutorials.model.Request;
+import org.hibernate.tutorials.model.DeliveryRequest;
 import org.hibernate.tutorials.model.payments.MonetaryAmount;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -31,11 +31,11 @@ public abstract class AbstractDaoTest {
     private static final MonetaryAmount PRICE = new MonetaryAmount(
             new BigDecimal("15.0"), Currency.getInstance("USD"));
 
-    private static final Request DEFAULT_TEST_REQUEST =
-            new Request("Test description", PROCESSING,
+    private static final DeliveryRequest DEFAULT_TEST_REQUEST =
+            new DeliveryRequest("Test description", PROCESSING,
                     DEFAULT_FROM_ADDRESS, DEFAULT_DELIVERY_ADDRESS, PRICE);
 
-    Request request;
+    DeliveryRequest deliveryRequest;
 
     @PersistenceContext
     EntityManager em;
@@ -45,6 +45,6 @@ public abstract class AbstractDaoTest {
 
     @Before
     public void init() {
-        request = new Request(DEFAULT_TEST_REQUEST);
+        deliveryRequest = new DeliveryRequest(DEFAULT_TEST_REQUEST);
     }
 }

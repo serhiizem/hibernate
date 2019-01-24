@@ -2,8 +2,10 @@ package org.hibernate.tutorials.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Columns;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.Type;
 import org.hibernate.tutorials.model.converters.MonetaryAmountConverter;
 import org.hibernate.tutorials.model.payments.MonetaryAmount;
 
@@ -14,12 +16,26 @@ import java.util.Date;
 @Entity
 @Table(name = "REQUESTS")
 @NoArgsConstructor
-public class Request extends PersistentEntity {
+public class DeliveryRequest extends PersistentEntity {
 
     private String description;
 
     @Enumerated(value = EnumType.STRING)
     private RequestStatus status;
+
+    @Type(type = "mi_distance")
+    @Columns(columns = {
+            @Column(name = "AIR_DISTANCE"),
+            @Column(name = "AIR_DISTANCE_UNIT")
+    })
+    private Distance airDistance;
+
+    @Type(type = "km_distance")
+    @Columns(columns = {
+            @Column(name = "LAND_DISTANCE"),
+            @Column(name = "LAND_DISTANCE_UNIT")
+    })
+    private Distance landDistance;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "LAST_MODIFIED_DATE", insertable = false, updatable = false)
@@ -51,9 +67,9 @@ public class Request extends PersistentEntity {
     @Convert(converter = MonetaryAmountConverter.class)
     private MonetaryAmount price;
 
-    public Request(String description, RequestStatus status,
-                   Address fromAddress, Address deliveryAddress,
-                   MonetaryAmount price) {
+    public DeliveryRequest(String description, RequestStatus status,
+                           Address fromAddress, Address deliveryAddress,
+                           MonetaryAmount price) {
         this.description = description;
         this.status = status;
         this.fromAddress = fromAddress;
@@ -61,9 +77,9 @@ public class Request extends PersistentEntity {
         this.price = price;
     }
 
-    public Request(Request request) {
-        this(request.getDescription(), request.getStatus(), request.getFromAddress(),
-                request.getDeliveryAddress(), request.getPrice());
+    public DeliveryRequest(DeliveryRequest deliveryRequest) {
+        this(deliveryRequest.getDescription(), deliveryRequest.getStatus(), deliveryRequest.getFromAddress(),
+                deliveryRequest.getDeliveryAddress(), deliveryRequest.getPrice());
     }
 
     public void setDescription(String description) {

@@ -1,7 +1,7 @@
 package org.hibernate.tutorials;
 
 import org.hibernate.tutorials.model.Address;
-import org.hibernate.tutorials.model.Request;
+import org.hibernate.tutorials.model.DeliveryRequest;
 import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -11,10 +11,10 @@ public class EmbeddableComponentsTest extends AbstractDaoTest {
 
     @Test
     public void overriddenEmbeddedAttributeShouldCorrespondToAnotherSetOfDBColumns() {
-        em.persist(request);
+        em.persist(deliveryRequest);
         em.flush();
 
-        Request savedRequest = em.find(Request.class, request.getId());
+        DeliveryRequest savedRequest = em.find(DeliveryRequest.class, deliveryRequest.getId());
 
         Address savedFromAddress = savedRequest.getFromAddress();
         assertNotNull(savedFromAddress.getCity());

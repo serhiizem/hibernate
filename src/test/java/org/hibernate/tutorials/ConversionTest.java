@@ -9,14 +9,14 @@ public class ConversionTest extends AbstractDaoTest {
 
     @Test
     public void shouldStoreMonetaryAmountAttributeUsingConversionToString() {
-        em.persist(request);
+        em.persist(deliveryRequest);
         em.flush();
 
         String priceStringFromDB = jdbcTemplate.queryForObject(
                 GET_REQUEST_PRICE_BY_REQUEST_ID_STATEMENT,
-                new Object[]{request.getId()},
+                new Object[]{deliveryRequest.getId()},
                 String.class);
 
-        assertEquals(request.getPrice().toString(), priceStringFromDB);
+        assertEquals(deliveryRequest.getPrice().toString(), priceStringFromDB);
     }
 }

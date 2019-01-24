@@ -38,37 +38,37 @@ public class BasicMappingTest extends AbstractDaoTest {
 
     @Test
     public void shouldGenerateCreationDateTimestamp() {
-        em.persist(request);
+        em.persist(deliveryRequest);
         em.flush();
 
-        assertNotNull(request.getCreationDate());
+        assertNotNull(deliveryRequest.getCreationDate());
     }
 
     @Test
     public void shouldUpdateLastModifiedDateOnDescriptionUpdate() {
-        em.persist(request);
+        em.persist(deliveryRequest);
         em.flush();
-        Date modifiedDateBeforeDescriptionModification = request.getLastModifiedDate();
+        Date modifiedDateBeforeDescriptionModification = deliveryRequest.getLastModifiedDate();
 
-        request.setDescription("Modified description");
-        em.persist(request);
+        deliveryRequest.setDescription("Modified description");
+        em.persist(deliveryRequest);
         em.flush();
 
         assertNull(modifiedDateBeforeDescriptionModification);
-        assertNotNull(request.getLastModifiedDate());
+        assertNotNull(deliveryRequest.getLastModifiedDate());
     }
 
     @Test
     public void shouldStoreEnumValueAsString() {
-        em.persist(request);
+        em.persist(deliveryRequest);
         em.flush();
 
         String statusAsString = jdbcTemplate.queryForObject(
                 GET_REQUEST_STATUS_BY_REQUEST_ID_STATEMENT,
-                new Object[]{request.getId()},
+                new Object[]{deliveryRequest.getId()},
                 String.class);
 
         //noinspection ConstantConditions
-        assertEquals(request.getStatus().toString(), statusAsString);
+        assertEquals(deliveryRequest.getStatus().toString(), statusAsString);
     }
 }
