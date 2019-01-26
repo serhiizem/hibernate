@@ -32,7 +32,7 @@ public class BasicMappingTest extends AbstractDaoTest {
                 new Object[]{user.getId()},
                 USER_MAPPER);
 
-        //noinspection ConstantConditions
+        assertNotNull(userFromJbdc);
         assertNotEquals(initialCardNumber, userFromJbdc.getCreditCardNumber());
     }
 
@@ -68,7 +68,7 @@ public class BasicMappingTest extends AbstractDaoTest {
                 new Object[]{deliveryRequest.getId()},
                 String.class);
 
-        //noinspection ConstantConditions
+        assertNotNull(statusAsString);
         assertEquals(deliveryRequest.getStatus().toString(), statusAsString);
     }
 }
