@@ -15,17 +15,12 @@
 @TypeDefs({
         @TypeDef(
                 name = "mi_distance",
-                typeClass = Distance.class,
-                parameters = {
-                        @Parameter(
-                                name = "convertTo",
-                                value = "mi"
-                        )
-                }
+                typeClass = DistanceUserType.class,
+                parameters = {@Parameter(name = "convertTo", value = "mi")}
         ),
         @TypeDef(
                 name = "km_distance",
-                typeClass = Distance.class,
+                typeClass = DistanceUserType.class,
                 parameters = {@Parameter(name = "convertTo", value = "km")}
         )}
 )
@@ -35,3 +30,4 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
+import org.hibernate.tutorials.model.converters.DistanceUserType;

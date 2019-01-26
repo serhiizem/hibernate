@@ -85,4 +85,12 @@ public class DeliveryRequest extends PersistentEntity {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public void setAirDistance(Distance airDistance) {
+        this.airDistance = airDistance;
+    }
+
+    public void setLandDistance(Distance landDistance) {
+        this.landDistance = landDistance;
+    }
 }

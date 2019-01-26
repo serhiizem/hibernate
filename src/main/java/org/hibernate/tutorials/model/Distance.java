@@ -1,11 +1,15 @@
 package org.hibernate.tutorials.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+import java.io.Serializable;
+
+@Getter
+@Setter
 @AllArgsConstructor
-public class Distance {
+public class Distance implements Serializable {
     private double quantity;
     private LengthUnit unit;
 

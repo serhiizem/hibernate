@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: work
+    active: home
   jpa:
     properties:
       hibernate:

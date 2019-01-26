@@ -18,15 +18,17 @@ public final class DistanceConverter {
             return distance;
         }
         if (KILOMETER.equals(lengthUnit) && MILE.equals(convertTo)) {
-            double inMiles = quantity / 1.4D;
+            double inMiles = quantity / 1.61D;
             distance.setQuantity(inMiles);
+            distance.setUnit(LengthUnit.MILE);
             return distance;
         }
         if (MILE.equals(lengthUnit) && MILE.equals(convertTo)) {
             return distance;
         } else {
-            double inKilometers = quantity * 1.4;
+            double inKilometers = quantity * 1.61D;
             distance.setQuantity(inKilometers);
+            distance.setUnit(LengthUnit.KILOMETER);
             return distance;
         }
     }

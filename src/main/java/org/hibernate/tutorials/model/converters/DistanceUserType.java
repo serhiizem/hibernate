@@ -1,8 +1,9 @@
-package org.hibernate.tutorials.model;
+package org.hibernate.tutorials.model.converters;
 
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
-import org.hibernate.tutorials.model.converters.DistanceConverter;
+import org.hibernate.tutorials.model.Distance;
+import org.hibernate.tutorials.model.LengthUnit;
 import org.hibernate.type.Type;
 import org.hibernate.usertype.CompositeUserType;
 import org.hibernate.usertype.DynamicParameterizedType;
@@ -30,7 +31,7 @@ public class DistanceUserType implements DynamicParameterizedType, CompositeUser
 
     @Override
     public String[] getPropertyNames() {
-        return new String[]{"name", "value"};
+        return new String[]{"quantity", "unit"};
     }
 
     @Override
