@@ -1,5 +1,6 @@
 package org.hibernate.tutorials;
 
+import org.hibernate.SessionFactory;
 import org.hibernate.tutorials.model.Address;
 import org.hibernate.tutorials.model.DeliveryRequest;
 import org.hibernate.tutorials.model.payments.MonetaryAmount;
@@ -13,6 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
 import java.util.Currency;
@@ -40,8 +42,15 @@ public abstract class AbstractDaoTest {
     @PersistenceContext
     EntityManager em;
 
+    SessionFactory sessionFactory;
+
     @Autowired
     protected JdbcTemplate jdbcTemplate; //for direct db access without hibernate
+
+    @Autowired
+    public void setSessionFactory(EntityManagerFactory emf) {
+        this.sessionFactory = emf.unwrap(SessionFactory.class);
+    }
 
     @Before
     public void init() {
