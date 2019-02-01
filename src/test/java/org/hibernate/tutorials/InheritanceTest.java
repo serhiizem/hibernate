@@ -1,12 +1,18 @@
 package org.hibernate.tutorials;
 
 import org.hibernate.stat.Statistics;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class InheritanceTest extends AbstractDaoTest {
+
+    @Before
+    public void init() {
+        sessionFactory.getStatistics().clear();
+    }
 
     @Test
     public void shouldExecuteOneStatementInCaseOfSingleTableMapping() {
