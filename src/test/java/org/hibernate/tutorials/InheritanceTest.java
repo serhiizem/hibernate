@@ -28,7 +28,7 @@ public class InheritanceTest extends AbstractDaoTest {
     }
 
     @Test
-    public void shouldExecuteTwoStatementsInCaseOfTablePerClassMapping() {
+    public void shouldExecuteOneStatementInCaseOfTablePerClassMapping() {
         em.createQuery(
                 "from org.hibernate.tutorials.model.inheritance.table_per_class.BillingDetails")
                 .getResultList();
@@ -37,6 +37,19 @@ public class InheritanceTest extends AbstractDaoTest {
         long queryExecutionCount = statistics.getQueryExecutionCount();
 
         //select from union
+        assertEquals(1, queryExecutionCount);
+    }
+
+    @Test
+    public void shouldExecuteOneInCaseOfJoinedMapping() {
+        em.createQuery(
+                "from org.hibernate.tutorials.model.inheritance.joined.BillingDetails")
+                .getResultList();
+
+        Statistics statistics = sessionFactory.getStatistics();
+        long queryExecutionCount = statistics.getQueryExecutionCount();
+
+        //select from left outer join
         assertEquals(1, queryExecutionCount);
     }
 }
