@@ -1,18 +1,16 @@
-package org.hibernate.tutorials.model.inheritance.joined;
+package org.hibernate.tutorials.model.inheritance.mixed;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
-@Table(name = "JOINED_BANK_ACCOUNT")
+@Table(name = "MIXED_CREDIT_CARD")
 @EqualsAndHashCode(callSuper = true)
-@PrimaryKeyJoinColumn(name = "BA_ID")
 public class BankAccount extends BillingDetails {
     @NotNull
     private String account;

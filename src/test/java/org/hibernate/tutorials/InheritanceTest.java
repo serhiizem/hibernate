@@ -52,4 +52,17 @@ public class InheritanceTest extends AbstractDaoTest {
         //select from left outer join
         assertEquals(1, queryExecutionCount);
     }
+
+    @Test
+    public void shouldExecuteOneInCaseOfMixedMapping() {
+        em.createQuery(
+                "from org.hibernate.tutorials.model.inheritance.mixed.BillingDetails")
+                .getResultList();
+
+        Statistics statistics = sessionFactory.getStatistics();
+        long queryExecutionCount = statistics.getQueryExecutionCount();
+
+        //select from left outer join
+        assertEquals(1, queryExecutionCount);
+    }
 }

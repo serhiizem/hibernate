@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
-@Table(name = "J_CREDIT_CARD")
+@Table(name = "JOINED_CREDIT_CARD")
 @EqualsAndHashCode(callSuper = true)
 @PrimaryKeyJoinColumn(name = "CC_ID")
 public class CreditCard extends BillingDetails {
