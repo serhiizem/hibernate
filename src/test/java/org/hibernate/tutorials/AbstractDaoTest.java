@@ -1,8 +1,10 @@
 package org.hibernate.tutorials;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.tutorials.model.Address;
 import org.hibernate.tutorials.model.DeliveryRequest;
+import org.hibernate.tutorials.model.embeddable.Address;
+import org.hibernate.tutorials.model.embeddable.Dimensions;
+import org.hibernate.tutorials.model.embeddable.Weight;
 import org.hibernate.tutorials.model.payments.MonetaryAmount;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -33,9 +35,14 @@ public abstract class AbstractDaoTest {
     private static final MonetaryAmount PRICE = new MonetaryAmount(
             new BigDecimal("15.0"), Currency.getInstance("USD"));
 
+    private static final Dimensions DEFAULT_DIMENSIONS =
+            new Dimensions("centimetre", "cm", new BigDecimal("15.0"), new BigDecimal("30.0"), new BigDecimal("20.0"));
+    private static final Weight DEFAULT_WEIGHT =
+            new Weight("pound", "lb", new BigDecimal("74.0"));
+
     private static final DeliveryRequest DEFAULT_TEST_REQUEST =
             new DeliveryRequest("Test description", PROCESSING,
-                    DEFAULT_FROM_ADDRESS, DEFAULT_DELIVERY_ADDRESS, PRICE);
+                    DEFAULT_FROM_ADDRESS, DEFAULT_DELIVERY_ADDRESS, PRICE, DEFAULT_DIMENSIONS, DEFAULT_WEIGHT);
 
     DeliveryRequest deliveryRequest;
 

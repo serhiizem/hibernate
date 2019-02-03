@@ -1,4 +1,4 @@
-package org.hibernate.tutorials.model;
+package org.hibernate.tutorials.model.embeddable;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

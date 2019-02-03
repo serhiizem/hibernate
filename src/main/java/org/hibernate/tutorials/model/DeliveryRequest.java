@@ -7,6 +7,9 @@ import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.Type;
 import org.hibernate.tutorials.model.converters.MonetaryAmountConverter;
+import org.hibernate.tutorials.model.embeddable.Address;
+import org.hibernate.tutorials.model.embeddable.Dimensions;
+import org.hibernate.tutorials.model.embeddable.Weight;
 import org.hibernate.tutorials.model.payments.MonetaryAmount;
 
 import javax.persistence.*;
@@ -67,19 +70,26 @@ public class DeliveryRequest extends PersistentEntity {
     @Convert(converter = MonetaryAmountConverter.class)
     private MonetaryAmount price;
 
+    private Dimensions dimensions;
+
+    private Weight weight;
+
     public DeliveryRequest(String description, RequestStatus status,
                            Address fromAddress, Address deliveryAddress,
-                           MonetaryAmount price) {
+                           MonetaryAmount price, Dimensions dimensions, Weight weight) {
         this.description = description;
         this.status = status;
         this.fromAddress = fromAddress;
         this.deliveryAddress = deliveryAddress;
         this.price = price;
+        this.dimensions = dimensions;
+        this.weight = weight;
     }
 
     public DeliveryRequest(DeliveryRequest deliveryRequest) {
         this(deliveryRequest.getDescription(), deliveryRequest.getStatus(), deliveryRequest.getFromAddress(),
-                deliveryRequest.getDeliveryAddress(), deliveryRequest.getPrice());
+                deliveryRequest.getDeliveryAddress(), deliveryRequest.getPrice(), deliveryRequest.getDimensions(),
+                deliveryRequest.getWeight());
     }
 
     public void setDescription(String description) {
