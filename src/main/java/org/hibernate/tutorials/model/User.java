@@ -3,13 +3,14 @@ package org.hibernate.tutorials.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnTransformer;
+import org.hibernate.tutorials.model.inheritance.joined.BillingDetails;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
+@Setter
 @Entity
 @Table(name = "USERS")
 @NoArgsConstructor
@@ -17,10 +18,18 @@ import javax.persistence.Table;
 public class User extends PersistentEntity {
     private String userName;
 
-    @Column(name = "CARD_NUMBER")
+    @Column(name = "CARD_NUMBER", columnDefinition = "bytea")
     @ColumnTransformer(
-            read = "pgp_sym_decrypt(creditCardNumber, 'mySecretKey')",
+            read = "pgp_sym_decrypt(CARD_NUMBER, 'mySecretKey')",
             write = "pgp_sym_encrypt(?, 'mySecretKey')"
     )
     private String creditCardNumber;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private BillingDetails defaultBillingDetails;
+
+    public User(String userName, String creditCardNumber) {
+        this.userName = userName;
+        this.creditCardNumber = creditCardNumber;
+    }
 }

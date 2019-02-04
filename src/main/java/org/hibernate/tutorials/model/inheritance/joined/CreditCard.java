@@ -1,7 +1,9 @@
 package org.hibernate.tutorials.model.inheritance.joined;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -10,6 +12,8 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "JOINED_CREDIT_CARD")
 @EqualsAndHashCode(callSuper = true)
 @PrimaryKeyJoinColumn(name = "CC_ID")

@@ -49,3 +49,6 @@ ALTER TABLE requests
 
 ALTER TABLE requests
     ADD COLUMN LAND_DISTANCE_UNIT VARCHAR(2);
+
+INSERT INTO public.users (id, user_name, default_billing_details_id, card_number) VALUES (1, null, 1148, null);
+INSERT INTO public.joined_credit_card (card_number, exp_month, exp_year, cc_id) VALUES ('555 666 111', '06', '2020', 1148);
