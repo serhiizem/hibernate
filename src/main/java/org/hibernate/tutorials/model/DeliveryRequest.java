@@ -2,18 +2,21 @@ package org.hibernate.tutorials.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Columns;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.OrderBy;
 import org.hibernate.tutorials.model.converters.MonetaryAmountConverter;
 import org.hibernate.tutorials.model.embeddable.Address;
+import org.hibernate.tutorials.model.embeddable.Comment;
 import org.hibernate.tutorials.model.embeddable.Dimensions;
 import org.hibernate.tutorials.model.embeddable.Weight;
 import org.hibernate.tutorials.model.payments.MonetaryAmount;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Entity
@@ -71,8 +74,25 @@ public class DeliveryRequest extends PersistentEntity {
     private MonetaryAmount price;
 
     private Dimensions dimensions;
-
     private Weight weight;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+            name = "comments",
+            joinColumns = {
+                    @JoinColumn(name = "request_id")
+            })
+    @OrderBy(clause = "DATE ASC")
+    private List<Comment> comments = new ArrayList<>();
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+            name = "notification_recipients",
+            joinColumns = {
+                    @JoinColumn(name = "request_id")
+            })
+    @Column(name = "email")
+    private List<String> notificationRecipients = new ArrayList<>();
 
     public DeliveryRequest(String description, RequestStatus status,
                            Address fromAddress, Address deliveryAddress,
