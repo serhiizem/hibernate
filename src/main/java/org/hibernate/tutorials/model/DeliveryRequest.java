@@ -14,9 +14,7 @@ import org.hibernate.tutorials.model.payments.MonetaryAmount;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Entity
@@ -92,7 +90,7 @@ public class DeliveryRequest extends PersistentEntity {
                     @JoinColumn(name = "request_id")
             })
     @Column(name = "email")
-    private List<String> notificationRecipients = new ArrayList<>();
+    private Set<String> notificationRecipients = new HashSet<>();
 
     public DeliveryRequest(String description, RequestStatus status,
                            Address fromAddress, Address deliveryAddress,

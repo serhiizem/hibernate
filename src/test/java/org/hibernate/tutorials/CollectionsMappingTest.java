@@ -5,7 +5,9 @@ import org.hibernate.tutorials.model.embeddable.Comment;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Comparator.comparing;
 import static org.hibernate.HibernateUtil.getAndCast;
@@ -27,12 +29,12 @@ public class CollectionsMappingTest extends AbstractDaoTest {
     @Test
     public void recipientsTableEntriesShouldBeMappedToAListOfStringsInDeliveryRequest() {
         DeliveryRequest dr = em.find(DeliveryRequest.class, 1179L);
-        List<String> notificationRecipients = dr.getNotificationRecipients();
+        Set<String> notificationRecipients = dr.getNotificationRecipients();
 
-        List<String> recipientsFromTable = getAndCast(em.createNativeQuery(
+        Set<String> recipientsFromTable = new HashSet<>(getAndCast(em.createNativeQuery(
                 "SELECT email " +
                         "FROM notification_recipients")
-                .getResultList());
+                .getResultList()));
 
         assertEquals(recipientsFromTable, notificationRecipients);
     }
