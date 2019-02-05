@@ -79,19 +79,44 @@ INSERT INTO comments (author, text, date, request_id)
 VALUES ('Author3', 'Desc23257835', TIMESTAMP '2019-05-21 15:25:35', 1179);
 
 CREATE TABLE notification_recipients (
-  id         BIGSERIAL PRIMARY KEY,
-  email      VARCHAR(55),
-  request_id BIGINT
+  request_id BIGINT,
+  email      VARCHAR(55)
 );
+
+ALTER TABLE notification_recipients
+  ADD CONSTRAINT notification_recipients_pk PRIMARY KEY (request_id, email);
 
 ALTER TABLE notification_recipients
   ADD CONSTRAINT recipients_requests_fk
 FOREIGN KEY (request_id) REFERENCES requests (id);
 
-INSERT INTO notification_recipients(email, request_id) VALUES ('test1@gmail.com', 1179);
-INSERT INTO notification_recipients(email, request_id) VALUES ('test3@gmail.com', 1179);
+INSERT INTO notification_recipients (email, request_id) VALUES ('test1@gmail.com', 1179);
+INSERT INTO notification_recipients (email, request_id) VALUES ('test3@gmail.com', 1179);
 
+CREATE TABLE contact_methods (
+  user_id     BIGINT,
+  method_type VARCHAR(55),
+  value       VARCHAR(255)
+);
 
+ALTER TABLE contact_methods
+  ADD CONSTRAINT contact_methods_pk
+PRIMARY KEY (user_id, method_type);
+
+ALTER TABLE contact_methods
+  ADD CONSTRAINT contact_method_user_fk
+FOREIGN KEY (user_id) REFERENCES users (id);
+
+INSERT INTO contact_methods (user_id, method_type, value)
+VALUES (1, 'Skype', 'live:test1skype');
+INSERT INTO contact_methods (user_id, method_type, value)
+VALUES (1, 'Phone', '+3809215354134');
+INSERT INTO contact_methods (user_id, method_type, value)
+VALUES (2, 'Phone', '+35254254262462');
+INSERT INTO contact_methods (user_id, method_type, value)
+VALUES (2, 'Email', 'test3@gmail.com');
+INSERT INTO contact_methods (user_id, method_type, value)
+VALUES (3, 'Skype', 'test4skype');
 
 
 

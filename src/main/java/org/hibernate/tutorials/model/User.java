@@ -8,6 +8,7 @@ import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.tutorials.model.inheritance.joined.BillingDetails;
 
 import javax.persistence.*;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -27,6 +28,14 @@ public class User extends PersistentEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private BillingDetails defaultBillingDetails;
+
+    @ElementCollection
+    @Column(name = "value")
+    @MapKeyClass(ContactMethod.class)
+    @MapKeyEnumerated(EnumType.STRING)
+    @MapKeyColumn(name = "method_type")
+    @CollectionTable(name = "contact_methods")
+    private Map<ContactMethod, String> contactMethods;
 
     public User(String userName, String creditCardNumber) {
         this.userName = userName;
