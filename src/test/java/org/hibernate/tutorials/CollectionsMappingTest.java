@@ -2,12 +2,12 @@ package org.hibernate.tutorials;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.hibernate.tutorials.model.ContactMethod;
-import org.hibernate.tutorials.model.DeliveryRequest;
-import org.hibernate.tutorials.model.User;
+import org.hibernate.exception.ConstraintViolationException;
+import org.hibernate.tutorials.model.*;
 import org.hibernate.tutorials.model.embeddable.Comment;
 import org.junit.Test;
 
+import javax.persistence.PersistenceException;
 import java.util.*;
 
 import static java.util.Comparator.comparing;
@@ -15,6 +15,7 @@ import static java.util.stream.Collectors.toMap;
 import static org.hibernate.HibernateUtil.getAndCast;
 import static org.hibernate.tutorials.model.ContactMethod.fromString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CollectionsMappingTest extends AbstractDaoTest {
 
@@ -64,6 +65,25 @@ public class CollectionsMappingTest extends AbstractDaoTest {
                         ContactMethodMapping::getValue));
 
         assertEquals(contactMethodsFromTable, contactMethods);
+    }
+
+    @Test
+    public void shouldThrowConstraintViolationExceptionWhenAddingEntityWithDuplicateFilenameForTheSameUser() {
+        assertThrows(ConstraintViolationException.class, () -> {
+            try {
+                User user = em.find(User.class, 1L);
+                FileName duplicateFilename = this.generateDuplicateKeyFilename();
+                user.getUserContracts().put(duplicateFilename, new UserContract());
+                em.persist(user);
+                em.flush();
+            } catch (PersistenceException e) {
+                throw e.getCause();
+            }
+        });
+    }
+
+    private FileName generateDuplicateKeyFilename() {
+        return new FileName("contract112234", "doc");
     }
 
     @Getter

@@ -37,6 +37,11 @@ public class User extends PersistentEntity {
     @CollectionTable(name = "contact_methods")
     private Map<ContactMethod, String> contactMethods;
 
+    // @MapKeyColumn and @AttributeOverrides are not applicable if key is an embeddable component
+    @ElementCollection
+    @CollectionTable(name = "USER_CONTRACTS")
+    private Map<FileName, UserContract> userContracts;
+
     public User(String userName, String creditCardNumber) {
         this.userName = userName;
         this.creditCardNumber = creditCardNumber;
