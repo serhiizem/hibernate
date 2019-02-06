@@ -8,6 +8,7 @@ import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.tutorials.model.inheritance.joined.BillingDetails;
 
 import javax.persistence.*;
+import java.util.HashMap;
 import java.util.Map;
 
 @Getter
@@ -35,12 +36,12 @@ public class User extends PersistentEntity {
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "method_type")
     @CollectionTable(name = "contact_methods")
-    private Map<ContactMethod, String> contactMethods;
+    private Map<ContactMethod, String> contactMethods = new HashMap<>();
 
     // @MapKeyColumn and @AttributeOverrides are not applicable if key is an embeddable component
     @ElementCollection
     @CollectionTable(name = "USER_CONTRACTS")
-    private Map<FileName, UserContract> userContracts;
+    private Map<FileName, UserContract> userContracts = new HashMap<>();
 
     public User(String userName, String creditCardNumber) {
         this.userName = userName;

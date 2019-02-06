@@ -82,6 +82,20 @@ public class CollectionsMappingTest extends AbstractDaoTest {
         });
     }
 
+    @Test
+    public void shouldAllowDuplicateImagesToBeAddedToOrderImagesCollection() {
+        Image image = new Image("test_image", "ftp://ftp://location", 150, 200);
+        Image duplicate = new Image("test_image", "ftp://ftp://location", 150, 200);
+
+        Order order = em.find(Order.class, 1L);
+
+        order.getOrderImages().add(image);
+        order.getOrderImages().add(duplicate);
+
+        em.persist(order);
+        em.flush();
+    }
+
     private FileName generateDuplicateKeyFilename() {
         return new FileName("contract112234", "doc");
     }
