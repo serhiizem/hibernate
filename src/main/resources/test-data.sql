@@ -29,18 +29,6 @@ BEFORE UPDATE OF description
   ON requests
 FOR EACH ROW EXECUTE PROCEDURE update_request_last_modified_date_function();
 
-ALTER TABLE requests
-  ADD COLUMN AIR_DISTANCE DOUBLE PRECISION;
-
-ALTER TABLE requests
-  ADD COLUMN AIR_DISTANCE_UNIT VARCHAR(2);
-
-ALTER TABLE requests
-  ADD COLUMN LAND_DISTANCE DOUBLE PRECISION;
-
-ALTER TABLE requests
-  ADD COLUMN LAND_DISTANCE_UNIT VARCHAR(2);
-
 INSERT INTO public.joined_billing_details (id, owner)
 VALUES (1148, 'Test owner');
 INSERT INTO public.joined_credit_card (card_number, exp_month, exp_year, cc_id)
@@ -60,15 +48,6 @@ INSERT INTO public.requests (id, creation_date, city, street, zip_code, descript
 VALUES (1179, '2019-02-05 00:00:00.000000', 'City #22', 'Street #2222', '5326', 'Test description', 'City #11',
               'Street #1111', '6235', NULL, '15.0 USD', 'PROCESSING', NULL, NULL, NULL, NULL, 15.00, 20.00, 30.00,
                                                         'centimetre', 'cm', 74.00, 'pound', 'lb');
-
-CREATE TABLE comments (
-  id         BIGSERIAL PRIMARY KEY,
-  author     VARCHAR(55),
-  text       VARCHAR(255),
-  date       TIMESTAMP,
-  request_id BIGINT
-);
-
 ALTER TABLE comments
   ADD CONSTRAINT comment_request_fk
 FOREIGN KEY (request_id) REFERENCES requests (id);
@@ -79,11 +58,6 @@ INSERT INTO comments (author, text, date, request_id)
 VALUES ('Author1', 'Desc23257835', TIMESTAMP '2019-05-21 15:21:01', 1179);
 INSERT INTO comments (author, text, date, request_id)
 VALUES ('Author3', 'Desc23257835', TIMESTAMP '2019-05-21 15:25:35', 1179);
-
-CREATE TABLE notification_recipients (
-  request_id BIGINT,
-  email      VARCHAR(55)
-);
 
 ALTER TABLE notification_recipients
   ADD CONSTRAINT notification_recipients_pk PRIMARY KEY (request_id, email);
