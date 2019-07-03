@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import static org.hibernate.JdbcUtils.*;
+import static org.hibernate.utils.JdbcUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BasicMappingTest extends AbstractDaoTest {

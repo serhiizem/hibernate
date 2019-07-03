@@ -12,7 +12,7 @@ import java.util.*;
 
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toMap;
-import static org.hibernate.HibernateUtil.getAndCast;
+import static org.hibernate.utils.HibernateUtil.getAndCast;
 import static org.hibernate.tutorials.model.ContactMethod.fromString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

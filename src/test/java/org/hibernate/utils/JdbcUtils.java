@@ -1,4 +1,4 @@
-package org.hibernate;
+package org.hibernate.utils;
 
 import org.hibernate.tutorials.model.User;
 import org.springframework.jdbc.core.RowMapper;

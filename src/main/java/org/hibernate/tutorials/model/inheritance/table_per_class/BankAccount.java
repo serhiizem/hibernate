@@ -4,10 +4,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
+@Table(name = "TABLE_PER_CLASS_BA")
 @EqualsAndHashCode(callSuper = true)
 public class BankAccount extends BillingDetails {
     @NotNull

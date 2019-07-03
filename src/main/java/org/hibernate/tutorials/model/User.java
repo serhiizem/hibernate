@@ -8,6 +8,7 @@ import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.tutorials.model.inheritance.joined.BillingDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends PersistentEntity {
+    @Column(nullable = false)
     private String userName;
 
     @Column(name = "CARD_NUMBER", columnDefinition = "bytea")

@@ -2,7 +2,7 @@ package org.hibernate.tutorials;
 
 import org.junit.Test;
 
-import static org.hibernate.JdbcUtils.GET_REQUEST_PRICE_BY_REQUEST_ID_STATEMENT;
+import static org.hibernate.utils.JdbcUtils.GET_REQUEST_PRICE_BY_REQUEST_ID_STATEMENT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ConversionTest extends AbstractDaoTest {

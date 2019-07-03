@@ -33,7 +33,7 @@ INSERT INTO public.joined_billing_details (id, owner)
 VALUES (1148, 'Test owner');
 INSERT INTO public.joined_credit_card (card_number, exp_month, exp_year, cc_id)
 VALUES ('555 666 111', '06', '2020', 1148);
-INSERT INTO public.users (id, user_name, default_billing_details_id, card_number) VALUES (1, NULL, 1148, NULL);
+INSERT INTO public.users (id, user_name, default_billing_details_id, card_number) VALUES (1, 'Darren', 1148, NULL);
 
 INSERT INTO public.orders (id, name, user_id, description) VALUES (3, 'ORDER#3', 1, NULL);
 INSERT INTO public.orders (id, name, user_id, description) VALUES (5, 'ORDER#5', 2, NULL);
@@ -69,16 +69,6 @@ FOREIGN KEY (request_id) REFERENCES requests (id);
 INSERT INTO notification_recipients (email, request_id) VALUES ('test1@gmail.com', 1179);
 INSERT INTO notification_recipients (email, request_id) VALUES ('test3@gmail.com', 1179);
 
-CREATE TABLE contact_methods (
-  user_id     BIGINT,
-  method_type VARCHAR(55),
-  value       VARCHAR(255)
-);
-
-ALTER TABLE contact_methods
-  ADD CONSTRAINT contact_methods_pk
-PRIMARY KEY (user_id, method_type);
-
 ALTER TABLE contact_methods
   ADD CONSTRAINT contact_method_user_fk
 FOREIGN KEY (user_id) REFERENCES users (id);
@@ -96,7 +86,6 @@ VALUES (3, 'SKYPE', 'test4skype');
 
 INSERT INTO user_contracts (user_id, generation_date, signing_date, file_extension, file_name)
 VALUES (1, TIMESTAMP '2019-03-16 07:25:59', TIMESTAMP '2019-03-16 09:35:21', 'doc', 'contract112234');
-
 
 
 

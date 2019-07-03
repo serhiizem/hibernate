@@ -1,4 +1,4 @@
-package org.hibernate;
+package org.hibernate.utils;
 
 import java.util.List;
 

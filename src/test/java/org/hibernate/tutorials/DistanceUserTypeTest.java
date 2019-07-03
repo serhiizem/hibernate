@@ -1,6 +1,6 @@
 package org.hibernate.tutorials;
 
-import org.hibernate.HibernateUtil;
+import org.hibernate.utils.HibernateUtil;
 import org.hibernate.tutorials.model.DeliveryRequest;
 import org.hibernate.tutorials.model.Distance;
 import org.hibernate.tutorials.model.LengthUnit;
@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Double.parseDouble;
-import static org.hibernate.HibernateUtil.getAndCast;
-import static org.hibernate.JdbcUtils.*;
+import static org.hibernate.utils.HibernateUtil.getAndCast;
+import static org.hibernate.utils.JdbcUtils.*;
 
 public class DistanceUserTypeTest extends AbstractDaoTest {
 
