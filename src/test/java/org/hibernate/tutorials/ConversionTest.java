@@ -2,7 +2,7 @@ package org.hibernate.tutorials;
 
 import org.junit.Test;
 
-import static org.hibernate.utils.JdbcUtils.GET_REQUEST_PRICE_BY_REQUEST_ID_STATEMENT;
+import static org.hibernate.utils.JdbcUtils.GET_REQUEST_PRICE_BY_REQUEST;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ConversionTest extends AbstractDaoTest {
@@ -13,7 +13,7 @@ public class ConversionTest extends AbstractDaoTest {
         em.flush();
 
         String priceStringFromDB = jdbcTemplate.queryForObject(
-                GET_REQUEST_PRICE_BY_REQUEST_ID_STATEMENT,
+                GET_REQUEST_PRICE_BY_REQUEST,
                 new Object[]{deliveryRequest.getId()},
                 String.class);
 

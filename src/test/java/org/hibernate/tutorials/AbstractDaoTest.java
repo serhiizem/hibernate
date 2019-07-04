@@ -2,12 +2,14 @@ package org.hibernate.tutorials;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.tutorials.model.DeliveryRequest;
 import org.hibernate.tutorials.model.embeddable.Address;
 import org.hibernate.tutorials.model.embeddable.Dimensions;
 import org.hibernate.tutorials.model.embeddable.Weight;
 import org.hibernate.tutorials.model.payments.MonetaryAmount;
+import org.hibernate.utils.ConcurrencyUtils;
 import org.hibernate.utils.ErrorableExecution;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -16,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
@@ -32,6 +35,7 @@ import static org.hibernate.tutorials.model.RequestStatus.PROCESSING;
 @Slf4j
 @DataJpaTest
 @RunWith(SpringRunner.class)
+@ContextConfiguration(classes = DaoConfig.class)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 public abstract class AbstractDaoTest {
 
@@ -57,21 +61,29 @@ public abstract class AbstractDaoTest {
     EntityManager em;
 
     SessionFactory sessionFactory;
+    JdbcTemplate jdbcTemplate; //for direct db access without hibernate
+    @SuppressWarnings("WeakerAccess")
+    ConcurrencyUtils concurrencyUtils;
 
     private EntityManagerFactory emf;
 
     @Autowired
-    protected JdbcTemplate jdbcTemplate; //for direct db access without hibernate
-
-    @Autowired
-    public void setFactories(EntityManagerFactory emf) {
+    public void initAbstractDaoTest(EntityManagerFactory emf,
+                                    ConcurrencyUtils concurrencyUtils,
+                                    JdbcTemplate jdbcTemplate) {
         this.emf = emf;
         this.sessionFactory = emf.unwrap(SessionFactory.class);
+        this.concurrencyUtils = concurrencyUtils;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Before
     public void init() {
         deliveryRequest = new DeliveryRequest(DEFAULT_TEST_REQUEST);
+    }
+
+    protected Session getSession() {
+        return this.em.unwrap(Session.class);
     }
 
     @SneakyThrows
@@ -117,7 +129,7 @@ public abstract class AbstractDaoTest {
     }
 
     protected <T> T executeInTransactionAndReturnResult(Function<EntityManager, T> function) {
-        T result = null;
+        T result;
         EntityManager entityManager = null;
         EntityTransaction txn = null;
         try {

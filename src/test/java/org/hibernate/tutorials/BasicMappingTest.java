@@ -28,7 +28,7 @@ public class BasicMappingTest extends AbstractDaoTest {
         em.flush();
 
         User userFromJbdc = jdbcTemplate.queryForObject(
-                GET_USER_BY_ID_STATEMENT,
+                GET_USER_BY_ID,
                 new Object[]{user.getId()},
                 USER_MAPPER);
 
@@ -64,7 +64,7 @@ public class BasicMappingTest extends AbstractDaoTest {
         em.flush();
 
         String statusAsString = jdbcTemplate.queryForObject(
-                GET_REQUEST_STATUS_BY_REQUEST_ID_STATEMENT,
+                GET_REQUEST_STATUS_BY_REQUEST_ID,
                 new Object[]{deliveryRequest.getId()},
                 String.class);
 
