@@ -91,8 +91,7 @@ public class EntityManagerTest extends AbstractDaoTest {
         assertEquals(originalUsername, usernameAfterUpdate);
     }
 
-    private String
-    getUsernameOfUser(@SuppressWarnings("SameParameterValue") Long userId) {
+    private String getUsernameOfUser(@SuppressWarnings("SameParameterValue") Long userId) {
         User user = jdbcTemplate.queryForObject(
                 GET_USER_BY_ID,
                 new Object[]{userId},
