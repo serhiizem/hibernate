@@ -25,4 +25,19 @@ public class Order extends PersistentEntity {
     )
     @CollectionTable(name = "IMAGES")
     private Collection<Image> orderImages = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null) return false;
+        if (!(other instanceof Order)) return false;
+        Order order = (Order) other;
+
+        return getName().equals(order.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * getName().hashCode();
+    }
 }

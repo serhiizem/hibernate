@@ -13,14 +13,11 @@ import org.junit.Test;
 import javax.persistence.FlushModeType;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.is;
 import static org.hibernate.tutorials.model.RequestStatus.CONFIRMED;
 import static org.hibernate.utils.Constants.REQUEST_ID;
 import static org.hibernate.utils.Constants.USER_ID;
 import static org.hibernate.utils.JdbcUtils.*;
-import static org.junit.Assert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class EntityManagerTest extends AbstractDaoTest {
 
@@ -40,7 +37,7 @@ public class EntityManagerTest extends AbstractDaoTest {
         DeliveryRequest deliveryRequest1 = em.find(DeliveryRequest.class, REQUEST_ID);
         DeliveryRequest deliveryRequest2 = em.find(DeliveryRequest.class, REQUEST_ID);
 
-        assertThat(deliveryRequest1 == deliveryRequest2, is(true));
+        assertSame(deliveryRequest1, deliveryRequest2);
     }
 
 

@@ -8,7 +8,6 @@ import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.tutorials.model.inheritance.joined.BillingDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 

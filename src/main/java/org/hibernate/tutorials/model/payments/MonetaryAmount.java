@@ -28,9 +28,9 @@ public class MonetaryAmount {
         if (!(o instanceof MonetaryAmount)) return false;
 
         MonetaryAmount ma = (MonetaryAmount) o;
-        if (!this.value.equals(ma.value)) return false;
+        if (!getValue().equals(ma.getValue())) return false;
 
-        return this.currency.equals(ma.currency);
+        return getCurrency().equals(ma.getCurrency());
     }
 
     @Override
