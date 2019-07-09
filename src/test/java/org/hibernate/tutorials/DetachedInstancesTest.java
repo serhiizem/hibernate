@@ -15,7 +15,7 @@ public class DetachedInstancesTest extends AbstractDaoTest {
         User user1_1 = em.find(User.class, USER_ID);
         User user1_2 = em.find(User.class, USER_ID);
 
-        User userFromAnotherContext = executeInTransactionAndReturnResult(entityManager ->
+        User userFromAnotherContext = hiberUtil.executeInTransactionAndReturnResult(entityManager ->
                 entityManager.find(User.class, USER_ID));
 
         assertSame(user1_1, user1_2);
@@ -34,7 +34,7 @@ public class DetachedInstancesTest extends AbstractDaoTest {
     public void shouldYieldEqualityForObjectsWithDatabaseIdentityButDifferentContextsIfEqualsIsOverwritten() {
         Order order = em.find(Order.class, ORDER_ID);
 
-        Order orderFromAnotherContext = executeInTransactionAndReturnResult(entityManager ->
+        Order orderFromAnotherContext = hiberUtil.executeInTransactionAndReturnResult(entityManager ->
                 entityManager.find(Order.class, ORDER_ID));
 
         assertNotSame(order, orderFromAnotherContext);
@@ -44,7 +44,7 @@ public class DetachedInstancesTest extends AbstractDaoTest {
 
     @Test
     public void shouldCreateNewPersistentObjectAfterCallingMerge() {
-        User detachedUser = executeInTransactionAndReturnResult(entityManager ->
+        User detachedUser = hiberUtil.executeInTransactionAndReturnResult(entityManager ->
                 entityManager.find(User.class, USER_ID));
 
         User mergedUser = em.merge(detachedUser);

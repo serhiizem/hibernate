@@ -16,10 +16,10 @@ public class OptimisticConcurrencyControlTest extends AbstractDaoTest {
         Order order = em.find(Order.class, ORDER_ID);
         Order originalOrder = new Order(order);
 
-        updateOrderNameInSeparateTransaction();
+        hiberUtil.updateOrderNameInSeparateTransaction();
         order.setName("Updated");
 
-        flushWithCleanup(em, () -> revertOrderToOriginalState(originalOrder));
+        flushWithCleanup(em, () -> hiberUtil.revertOrderToOriginalState(originalOrder));
     }
 
     @Test(expected = OptimisticLockException.class)
@@ -27,9 +27,9 @@ public class OptimisticConcurrencyControlTest extends AbstractDaoTest {
         BankAccount bankAccount = em.find(BankAccount.class, BANK_ACCOUNT_ID);
         BankAccount originalBankAccount = new BankAccount(bankAccount);
 
-        updateBankNameInSeparateTransaction();
+        hiberUtil.updateBankNameInSeparateTransaction();
         bankAccount.setBankName("Bank has changed");
 
-        flushWithCleanup(em, () -> revertBankAccountToOriginalState(originalBankAccount));
+        flushWithCleanup(em, () -> hiberUtil.revertBankAccountToOriginalState(originalBankAccount));
     }
 }

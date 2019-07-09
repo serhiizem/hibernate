@@ -43,7 +43,7 @@ public class EntityManagerTest extends AbstractDaoTest {
 
     @Test(expected = LazyInitializationException.class)
     public void shouldThrowLazyInitializationExceptionIfProxyIsNotInitializedDuringUnitOfWork() {
-        DeliveryRequest dr = executeInTransactionAndReturnResult(entityManager ->
+        DeliveryRequest dr = hiberUtil.executeInTransactionAndReturnResult(entityManager ->
                 entityManager.getReference(DeliveryRequest.class, REQUEST_ID));
 
         //noinspection ResultOfMethodCallIgnored
