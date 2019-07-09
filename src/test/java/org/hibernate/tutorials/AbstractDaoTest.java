@@ -5,12 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.tutorials.model.DeliveryRequest;
+import org.hibernate.tutorials.model.Order;
 import org.hibernate.tutorials.model.embeddable.Address;
 import org.hibernate.tutorials.model.embeddable.Dimensions;
 import org.hibernate.tutorials.model.embeddable.Weight;
+import org.hibernate.tutorials.model.inheritance.single_table.BankAccount;
 import org.hibernate.tutorials.model.payments.MonetaryAmount;
 import org.hibernate.utils.ConcurrencyUtils;
 import org.hibernate.utils.ErrorableExecution;
+import org.hibernate.utils.VoidSupplier;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static org.hibernate.tutorials.model.RequestStatus.PROCESSING;
+import static org.hibernate.utils.Constants.BANK_ACCOUNT_ID;
+import static org.hibernate.utils.Constants.ORDER_ID;
 
 @Slf4j
 @DataJpaTest
@@ -83,16 +88,59 @@ public abstract class AbstractDaoTest {
     }
 
     protected Session getSession() {
-        return this.em.unwrap(Session.class);
+        return em.unwrap(Session.class);
     }
 
     @SneakyThrows
-    protected void executeAndRethrowCauseIfErrored(ErrorableExecution<Void> execution) {
+    protected void executeAndRethrowCauseIfErrored(ErrorableExecution execution) {
         try {
             execution.accept(em);
         } catch (Exception e) {
             throw e.getCause();
         }
+    }
+
+    @SneakyThrows
+    protected void flushWithCleanup(EntityManager entityManager,
+                                    VoidSupplier tearDownFunction) {
+        try {
+            entityManager.flush();
+        } catch (Exception e) {
+            tearDownFunction.get();
+            throw e;
+        }
+    }
+
+    public void updateOrderNameInSeparateTransaction() {
+        executeInTransaction(entityManager -> {
+            Order order = entityManager.find(Order.class, ORDER_ID);
+            order.setName("Updated in other thread");
+        });
+    }
+
+    public void revertOrderToOriginalState(Order order) {
+        executeInTransaction(entityManager -> {
+            Long orderId = order.getId();
+            String originalName = order.getName();
+            Order currentOrder = entityManager.find(Order.class, orderId);
+            currentOrder.setName(originalName);
+        });
+    }
+
+    public void updateBankNameInSeparateTransaction() {
+        executeInTransaction(entityManager -> {
+            BankAccount bankAccount = entityManager.find(BankAccount.class, BANK_ACCOUNT_ID);
+            bankAccount.setBankName("Other bank");
+        });
+    }
+
+    public void revertBankAccountToOriginalState(BankAccount originalBankAccount) {
+        executeInTransaction(entityManager -> {
+            Long accountId = originalBankAccount.getId();
+            String originalBankName = originalBankAccount.getBankName();
+            BankAccount bankAccount = entityManager.find(BankAccount.class, accountId);
+            bankAccount.setBankName(originalBankName);
+        });
     }
 
     protected void executeInTransaction(Consumer<EntityManager> function) {

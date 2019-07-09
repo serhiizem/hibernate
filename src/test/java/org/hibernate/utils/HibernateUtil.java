@@ -1,20 +1,17 @@
 package org.hibernate.utils;
 
+import lombok.AllArgsConstructor;
+
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
-public interface HibernateUtil<T> {
+@AllArgsConstructor
+public class HibernateUtil {
 
-    static <T> List<T> getAndCast(List list) {
+    private EntityManagerFactory emf;
+
+    public static <T> List<T> getAndCast(List list) {
         //noinspection unchecked
         return (List<T>) list;
     }
-
-    default void executeInit() {
-        List<T> td = prepareTestData();
-        storeTestData(td);
-    }
-
-    List<T> prepareTestData();
-
-    void storeTestData(List<T> data);
 }

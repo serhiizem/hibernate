@@ -1,6 +1,8 @@
 package org.hibernate.tutorials.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CollectionId;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Type;
@@ -12,7 +14,13 @@ import java.util.Collection;
 @Getter
 @Entity
 @Table(name = "ORDERS")
+@NoArgsConstructor
 public class Order extends PersistentEntity {
+
+    @Version
+    private long version;
+
+    @Setter
     private String name;
     @Formula("SUBSTRING(DESCRIPTION,0,10) || '...'")
     private String shortDescription;
@@ -25,6 +33,13 @@ public class Order extends PersistentEntity {
     )
     @CollectionTable(name = "IMAGES")
     private Collection<Image> orderImages = new ArrayList<>();
+
+    public Order(Order order) {
+        super(order.getId());
+        this.version = order.getVersion();
+        this.name = order.getName();
+        this.orderImages = order.getOrderImages();
+    }
 
     @Override
     public boolean equals(Object other) {

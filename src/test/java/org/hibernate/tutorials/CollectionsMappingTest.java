@@ -12,8 +12,8 @@ import java.util.*;
 
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toMap;
-import static org.hibernate.utils.HibernateUtil.getAndCast;
 import static org.hibernate.tutorials.model.ContactMethod.fromString;
+import static org.hibernate.utils.HibernateUtil.getAndCast;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -35,10 +35,11 @@ public class CollectionsMappingTest extends AbstractDaoTest {
         DeliveryRequest dr = em.find(DeliveryRequest.class, 1179L);
         Set<String> notificationRecipients = dr.getNotificationRecipients();
 
-        Set<String> recipientsFromTable = new HashSet<>(getAndCast(em.createNativeQuery(
-                "SELECT email " +
-                        "FROM notification_recipients")
-                .getResultList()));
+        Set<String> recipientsFromTable = new HashSet<>(
+                getAndCast(em.createNativeQuery(
+                        "SELECT email " +
+                                "FROM notification_recipients")
+                        .getResultList()));
 
         assertEquals(recipientsFromTable, notificationRecipients);
     }

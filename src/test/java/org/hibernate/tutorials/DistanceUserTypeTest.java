@@ -1,6 +1,5 @@
 package org.hibernate.tutorials;
 
-import org.hibernate.utils.HibernateUtil;
 import org.hibernate.tutorials.model.DeliveryRequest;
 import org.hibernate.tutorials.model.Distance;
 import org.hibernate.tutorials.model.LengthUnit;
@@ -11,12 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Double.parseDouble;
-import static org.hibernate.utils.HibernateUtil.getAndCast;
 import static org.hibernate.utils.JdbcUtils.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DistanceUserTypeTest extends AbstractDaoTest {
-
-    private final HibernateUtil<DeliveryRequest> testUtil = new DistanceUserTypeUtil();
 
     @Test
     public void shouldConvertAirDistanceFromKilometersToMiles() {
@@ -36,7 +33,7 @@ public class DistanceUserTypeTest extends AbstractDaoTest {
         double distanceInMiles = initialDistanceInKm / 1.61D;
 
         Assertions.assertNotNull(airDistanceResult);
-        Assertions.assertEquals(distanceInMiles, parseDouble(airDistanceResult));
+        assertEquals(distanceInMiles, parseDouble(airDistanceResult));
     }
 
     @Test
@@ -54,7 +51,7 @@ public class DistanceUserTypeTest extends AbstractDaoTest {
                         String.class));
 
         Assertions.assertNotNull(airDistanceUnitResult);
-        Assertions.assertEquals(airDistanceUnitResult, LengthUnit.MILE);
+        assertEquals(airDistanceUnitResult, LengthUnit.MILE);
     }
 
     @Test
@@ -75,7 +72,7 @@ public class DistanceUserTypeTest extends AbstractDaoTest {
         double distanceInKm = initialDistanceInMi * 1.61D;
 
         Assertions.assertNotNull(landDistanceResult);
-        Assertions.assertEquals(distanceInKm, parseDouble(landDistanceResult));
+        assertEquals(distanceInKm, parseDouble(landDistanceResult));
     }
 
     @Test
@@ -93,45 +90,44 @@ public class DistanceUserTypeTest extends AbstractDaoTest {
                         String.class));
 
         Assertions.assertNotNull(landDistanceUnitResult);
-        Assertions.assertEquals(landDistanceUnitResult, LengthUnit.KILOMETER);
+        assertEquals(landDistanceUnitResult, LengthUnit.KILOMETER);
     }
 
     @Test
     public void shouldFindByQuantityPropertyOfDistanceCustomUserType() {
-        testUtil.executeInit();
+        createTestRequests();
 
-        List<DeliveryRequest> requests =
-                getAndCast(em.createQuery(
-                        "from DeliveryRequest d " +
-                                "where d.airDistance.quantity = 15 or d.landDistance.quantity = 15")
-                        .getResultList());
+        List<DeliveryRequest> requests = em.createQuery(
+                "from DeliveryRequest d " +
+                        "where d.airDistance.quantity = 15 or d.landDistance.quantity = 15", DeliveryRequest.class)
+                .getResultList();
 
-        Assertions.assertEquals(requests.size(), 2);
+        assertEquals(requests.size(), 2);
     }
 
-    private class DistanceUserTypeUtil implements HibernateUtil<DeliveryRequest> {
+    private void createTestRequests() {
+        List<DeliveryRequest> deliveryRequests = prepareRequests();
+        storeRequests(deliveryRequests);
+    }
 
-        @Override
-        public List<DeliveryRequest> prepareTestData() {
-            List<DeliveryRequest> requests = new ArrayList<>();
+    public List<DeliveryRequest> prepareRequests() {
+        List<DeliveryRequest> requests = new ArrayList<>();
 
-            DeliveryRequest dr1 = new DeliveryRequest(deliveryRequest);
-            dr1.setLandDistance(Distance.fromString("15 km"));
-            DeliveryRequest dr2 = new DeliveryRequest(deliveryRequest);
-            dr2.setAirDistance(Distance.fromString("15 mi"));
+        DeliveryRequest dr1 = new DeliveryRequest(deliveryRequest);
+        dr1.setLandDistance(Distance.fromString("15 km"));
+        DeliveryRequest dr2 = new DeliveryRequest(deliveryRequest);
+        dr2.setAirDistance(Distance.fromString("15 mi"));
 
-            requests.add(dr1);
-            requests.add(dr2);
+        requests.add(dr1);
+        requests.add(dr2);
 
-            return requests;
+        return requests;
+    }
+
+    public void storeRequests(List<DeliveryRequest> requests) {
+        for (DeliveryRequest request : requests) {
+            em.persist(request);
         }
-
-        @Override
-        public void storeTestData(List<DeliveryRequest> requests) {
-            for (DeliveryRequest request : requests) {
-                em.persist(request);
-            }
-            em.flush();
-        }
+        em.flush();
     }
 }

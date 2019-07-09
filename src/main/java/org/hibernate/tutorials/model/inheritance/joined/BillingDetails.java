@@ -6,8 +6,8 @@ import javax.persistence.*;
 
 @Getter
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "JOINED_BILLING_DETAILS")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class BillingDetails {
 
     @Id
