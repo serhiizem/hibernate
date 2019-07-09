@@ -19,7 +19,7 @@ public class OptimisticConcurrencyControlTest extends AbstractDaoTest {
         hiberUtil.updateOrderNameInSeparateTransaction();
         order.setName("Updated");
 
-        flushWithCleanup(em, () -> hiberUtil.revertOrderToOriginalState(originalOrder));
+        flushWithCleanup(() -> hiberUtil.revertOrderToOriginalState(originalOrder));
     }
 
     @Test(expected = OptimisticLockException.class)
@@ -30,6 +30,6 @@ public class OptimisticConcurrencyControlTest extends AbstractDaoTest {
         hiberUtil.updateBankNameInSeparateTransaction();
         bankAccount.setBankName("Bank has changed");
 
-        flushWithCleanup(em, () -> hiberUtil.revertBankAccountToOriginalState(originalBankAccount));
+        flushWithCleanup(() -> hiberUtil.revertBankAccountToOriginalState(originalBankAccount));
     }
 }
