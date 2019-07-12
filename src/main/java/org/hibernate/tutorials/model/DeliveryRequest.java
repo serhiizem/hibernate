@@ -2,8 +2,9 @@ package org.hibernate.tutorials.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.*;
+import lombok.Setter;
 import org.hibernate.annotations.OrderBy;
+import org.hibernate.annotations.*;
 import org.hibernate.tutorials.model.converters.MonetaryAmountConverter;
 import org.hibernate.tutorials.model.embeddable.Address;
 import org.hibernate.tutorials.model.embeddable.Comment;
@@ -11,9 +12,9 @@ import org.hibernate.tutorials.model.embeddable.Dimensions;
 import org.hibernate.tutorials.model.embeddable.Weight;
 import org.hibernate.tutorials.model.payments.MonetaryAmount;
 
-import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.*;
 
 @Getter
@@ -22,11 +23,17 @@ import java.util.*;
 @NoArgsConstructor
 public class DeliveryRequest extends PersistentEntity {
 
+    @Version
+    private long version;
+
+    @Setter
     private String description;
 
+    @Setter
     @Enumerated(value = EnumType.STRING)
     private RequestStatus status;
 
+    @Setter
     @Type(type = "mi_distance")
     @Columns(columns = {
             @Column(name = "AIR_DISTANCE"),
@@ -34,6 +41,7 @@ public class DeliveryRequest extends PersistentEntity {
     })
     private Distance airDistance;
 
+    @Setter
     @Type(type = "km_distance")
     @Columns(columns = {
             @Column(name = "LAND_DISTANCE"),
@@ -108,17 +116,5 @@ public class DeliveryRequest extends PersistentEntity {
         this(deliveryRequest.getDescription(), deliveryRequest.getStatus(), deliveryRequest.getFromAddress(),
                 deliveryRequest.getDeliveryAddress(), deliveryRequest.getPrice(), deliveryRequest.getDimensions(),
                 deliveryRequest.getWeight());
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setAirDistance(Distance airDistance) {
-        this.airDistance = airDistance;
-    }
-
-    public void setLandDistance(Distance landDistance) {
-        this.landDistance = landDistance;
     }
 }

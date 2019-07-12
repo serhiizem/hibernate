@@ -13,6 +13,8 @@ public interface JdbcUtils {
     String GET_LAND_DISTANCE = "SELECT LAND_DISTANCE FROM REQUESTS WHERE ID = ?";
     String GET_LAND_DISTANCE_UNIT = "SELECT LAND_DISTANCE_UNIT FROM REQUESTS WHERE ID = ?";
 
+    String GET_REQUESTS_WITH_STATUS = "SELECT dr FROM DeliveryRequest dr WHERE dr.status = :status";
+
     String SET_STATUS_OF_REQUEST = "UPDATE REQUESTS SET status = ? WHERE ID = ?";
 
     RowMapper<User> USER_MAPPER = (rs, rowNum) -> {

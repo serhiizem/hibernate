@@ -10,6 +10,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 @Getter
 @Entity
@@ -18,7 +19,8 @@ import java.util.Collection;
 public class Order extends PersistentEntity {
 
     @Version
-    private long version;
+    @Type(type = "dbtimestamp")
+    private Date version;
 
     @Setter
     private String name;

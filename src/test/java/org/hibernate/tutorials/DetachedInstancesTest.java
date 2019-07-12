@@ -49,10 +49,10 @@ public class DetachedInstancesTest extends AbstractDaoTest {
 
         User mergedUser = em.merge(detachedUser);
 
-        boolean isDetachedUserInContextAfterMerge = em.contains(detachedUser);
-        boolean isMergedUserInContextAfterMerge = em.contains(mergedUser);
+        boolean isDetachedUserInContext = em.contains(detachedUser);
+        boolean isMergedUserInContext = em.contains(mergedUser);
 
-        assertFalse(isDetachedUserInContextAfterMerge);
-        assertTrue(isMergedUserInContextAfterMerge);
+        assertFalse(isDetachedUserInContext);
+        assertTrue(isMergedUserInContext);
     }
 }

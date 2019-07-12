@@ -72,13 +72,11 @@ public abstract class AbstractDaoTest {
         }
     }
 
-    @SneakyThrows
     protected void flushWithCleanup(VoidSupplier tearDownFunction) {
         try {
             em.flush();
-        } catch (Exception e) {
+        } finally {
             tearDownFunction.get();
-            throw e;
         }
     }
 }

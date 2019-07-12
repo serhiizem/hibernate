@@ -94,7 +94,6 @@ public class CollectionsMappingTest extends AbstractDaoTest {
         order.getOrderImages().add(duplicate);
 
         em.persist(order);
-        em.flush();
     }
 
     private FileName generateDuplicateKeyFilename() {

@@ -18,6 +18,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends PersistentEntity {
+
     @Column(nullable = false)
     private String userName;
 

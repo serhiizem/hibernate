@@ -49,27 +49,41 @@ VALUES ('334 316 613', '06', '2020', 1150);
 INSERT INTO public.users (id, user_name, default_billing_details_id, card_number)
 VALUES (1, 'Darren', 1148, NULL);
 
-INSERT INTO public.orders (id, name, user_id, description, version)
-VALUES (3, 'ORDER#3', 1, NULL, 0);
-INSERT INTO public.orders (id, name, user_id, description, version)
-VALUES (5, 'ORDER#5', 2, NULL, 0);
-INSERT INTO public.orders (id, name, user_id, description, version)
+INSERT INTO public.orders (id, name, user_id, description)
+VALUES (3, 'ORDER#3', 1, NULL);
+INSERT INTO public.orders (id, name, user_id, description)
+VALUES (5, 'ORDER#5', 2, NULL);
+INSERT INTO public.orders (id, name, user_id, description)
 VALUES (1, 'ORDER#1', 1,
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 0);
-INSERT INTO public.orders (id, name, user_id, description, version)
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
+INSERT INTO public.orders (id, name, user_id, description)
 VALUES (2, 'ORDER#2', 1,
-        'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', 0);
-INSERT INTO public.orders (id, name, user_id, description, version)
+        'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.');
+INSERT INTO public.orders (id, name, user_id, description)
 VALUES (4, 'ORDER#4', 2,
-        'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.', 0);
+        'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.');
 
 INSERT INTO public.requests (id, creation_date, city, street, zip_code, description, from_city, from_street,
                              from_zip_code, last_modified_date, price, status, air_distance, air_distance_unit,
                              land_distance, land_distance_unit, height, length, width, dimensions_name,
-                             dimensions_symbol, weight, weight_name, weight_symbol)
-VALUES (1179, '2019-02-05 00:00:00.000000', 'City #22', 'Street #2222', '5326', 'Test description', 'City #11',
+                             dimensions_symbol, weight, weight_name, weight_symbol, version)
+VALUES (1179, '2019-11-15 00:00:00.000000', 'City #22', 'Street #2222', '5326', 'Test description', 'City #11',
         'Street #1111', '6235', NULL, '15.0 USD', 'PROCESSING', NULL, NULL, NULL, NULL, 15.00, 20.00, 30.00,
-        'centimetre', 'cm', 74.00, 'pound', 'lb');
+        'centimetre', 'cm', 74.00, 'pound', 'lb', 0);
+INSERT INTO public.requests (id, creation_date, city, street, zip_code, description, from_city, from_street,
+                             from_zip_code, last_modified_date, price, status, air_distance, air_distance_unit,
+                             land_distance, land_distance_unit, height, length, width, dimensions_name,
+                             dimensions_symbol, weight, weight_name, weight_symbol, version)
+VALUES (1180, '2019-03-16 00:00:00.000000', 'City #31', 'Street #2222', '5326', 'Test description', 'City #11',
+        'Street #82452', '6235', NULL, '25.4 USD', 'CONFIRMED', NULL, NULL, NULL, NULL, 21.00, 45.00, 12.00,
+        'centimetre', 'cm', 81.00, 'pound', 'lb', 0);
+INSERT INTO public.requests (id, creation_date, city, street, zip_code, description, from_city, from_street,
+                             from_zip_code, last_modified_date, price, status, air_distance, air_distance_unit,
+                             land_distance, land_distance_unit, height, length, width, dimensions_name,
+                             dimensions_symbol, weight, weight_name, weight_symbol, version)
+VALUES (1181, '2019-02-05 00:00:00.000000', 'City #45', 'Street #2222', '5326', 'Test description', 'City #11',
+        'Street #43116', '6235', NULL, '39.99 USD', 'DELIVERED', NULL, NULL, NULL, NULL, 34.00, 34.00, 34.00,
+        'centimetre', 'cm', 96.00, 'pound', 'lb', 0);
 ALTER TABLE comments
   ADD CONSTRAINT comment_request_fk
     FOREIGN KEY (request_id) REFERENCES requests (id);

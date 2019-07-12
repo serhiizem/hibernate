@@ -2,8 +2,8 @@ package org.hibernate.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.tutorials.model.Order;
 import org.hibernate.tutorials.model.inheritance.single_table.BankAccount;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -13,33 +13,19 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static org.hibernate.utils.Constants.BANK_ACCOUNT_ID;
-import static org.hibernate.utils.Constants.ORDER_ID;
+import static org.hibernate.utils.RevertStrategy.HIBERNATE;
+import static org.hibernate.utils.RevertStrategy.JDBC;
 
 @Slf4j
 @AllArgsConstructor
 public class HibernateUtil {
 
     private EntityManagerFactory emf;
+    private JdbcTemplate jdbcTemplate;
 
     public static <T> List<T> getAndCast(List list) {
         //noinspection unchecked
         return (List<T>) list;
-    }
-
-    public void updateOrderNameInSeparateTransaction() {
-        executeInTransaction(entityManager -> {
-            Order order = entityManager.find(Order.class, ORDER_ID);
-            order.setName("Updated in other thread");
-        });
-    }
-
-    public void revertOrderToOriginalState(Order order) {
-        executeInTransaction(entityManager -> {
-            Long orderId = order.getId();
-            String originalName = order.getName();
-            Order currentOrder = entityManager.find(Order.class, orderId);
-            currentOrder.setName(originalName);
-        });
     }
 
     public void updateBankNameInSeparateTransaction() {
@@ -50,15 +36,26 @@ public class HibernateUtil {
     }
 
     public void revertBankAccountToOriginalState(BankAccount originalBankAccount) {
-        executeInTransaction(entityManager -> {
-            Long accountId = originalBankAccount.getId();
-            String originalBankName = originalBankAccount.getBankName();
-            BankAccount bankAccount = entityManager.find(BankAccount.class, accountId);
-            bankAccount.setBankName(originalBankName);
-        });
+        revertBankAccountToOriginalState(originalBankAccount, HIBERNATE);
     }
 
-    private void executeInTransaction(Consumer<EntityManager> function) {
+    public void revertBankAccountToOriginalState(BankAccount originalBankAccount,
+                                                 RevertStrategy strategy) {
+        if (strategy.equals(HIBERNATE)) {
+            executeInTransaction(entityManager -> {
+                Long accountId = originalBankAccount.getId();
+                String originalBankName = originalBankAccount.getBankName();
+                BankAccount bankAccount = entityManager.find(BankAccount.class, accountId);
+                bankAccount.setBankName(originalBankName);
+            });
+        }
+        if (strategy.equals(JDBC)) {
+            jdbcTemplate.update("UPDATE billing_details SET bank_name = ? WHERE id = ?",
+                    originalBankAccount.getBankName(), originalBankAccount.getId());
+        }
+    }
+
+    public void executeInTransaction(Consumer<EntityManager> function) {
         EntityManager entityManager = null;
         EntityTransaction txn = null;
         try {
