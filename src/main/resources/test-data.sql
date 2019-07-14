@@ -1,19 +1,11 @@
-INSERT INTO users (id, user_name)
-VALUES (2, 'User#2');
-INSERT INTO users (id, user_name)
-VALUES (3, 'User#3');
+INSERT INTO users (id, user_name, version)
+VALUES (2, 'User#2', 0);
+INSERT INTO users (id, user_name, version)
+VALUES (3, 'User#3', 0);
 
-ALTER TABLE orders
-  ADD COLUMN
-    user_id BIGINT;
 ALTER TABLE orders
   ADD COLUMN
     description VARCHAR(255);
-
-ALTER TABLE orders
-  ADD CONSTRAINT orders_user_fk
-    FOREIGN KEY (user_id) REFERENCES users;
-
 
 CREATE OR REPLACE FUNCTION update_request_last_modified_date_function()
   RETURNS TRIGGER
@@ -46,8 +38,8 @@ INSERT INTO public.joined_bank_account (account, bank_name, swift, ba_id)
 VALUES ('3413513', 'Santander', '#57245$*#!@-352==2\\4123', 1149);
 INSERT INTO public.joined_credit_card (card_number, exp_month, exp_year, cc_id)
 VALUES ('334 316 613', '06', '2020', 1150);
-INSERT INTO public.users (id, user_name, default_billing_details_id, card_number)
-VALUES (1, 'Darren', 1148, NULL);
+INSERT INTO public.users (id, user_name, default_billing_details_id, card_number, version)
+VALUES (1, 'Darren', 1148, NULL, 0);
 
 INSERT INTO public.orders (id, name, user_id, description)
 VALUES (3, 'ORDER#3', 1, NULL);

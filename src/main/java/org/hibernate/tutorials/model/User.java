@@ -9,7 +9,9 @@ import org.hibernate.tutorials.model.inheritance.joined.BillingDetails;
 
 import javax.persistence.*;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -18,6 +20,9 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends PersistentEntity {
+
+    @Version
+    private long version;
 
     @Column(nullable = false)
     private String userName;
@@ -45,8 +50,16 @@ public class User extends PersistentEntity {
     @CollectionTable(name = "USER_CONTRACTS")
     private Map<FileName, UserContract> userContracts = new HashMap<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Order> orders = new HashSet<>();
+
     public User(String userName, String creditCardNumber) {
         this.userName = userName;
         this.creditCardNumber = creditCardNumber;
+    }
+
+    public void addOrder(Order order) {
+        orders.add(order);
+        order.setUser(this);
     }
 }

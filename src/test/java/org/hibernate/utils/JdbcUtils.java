@@ -14,6 +14,7 @@ public interface JdbcUtils {
     String GET_LAND_DISTANCE_UNIT = "SELECT LAND_DISTANCE_UNIT FROM REQUESTS WHERE ID = ?";
 
     String GET_REQUESTS_WITH_STATUS = "SELECT dr FROM DeliveryRequest dr WHERE dr.status = :status";
+    String GET_LARGEST_ORDER_ID = "SELECT r.id FROM Order r ORDER BY r.id DESC";
 
     String SET_STATUS_OF_REQUEST = "UPDATE REQUESTS SET status = ? WHERE ID = ?";
 

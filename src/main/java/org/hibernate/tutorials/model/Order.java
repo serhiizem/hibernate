@@ -36,6 +36,11 @@ public class Order extends PersistentEntity {
     @CollectionTable(name = "IMAGES")
     private Collection<Image> orderImages = new ArrayList<>();
 
+    @Setter
+    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private User user;
+
     public Order(Order order) {
         super(order.getId());
         this.version = order.getVersion();

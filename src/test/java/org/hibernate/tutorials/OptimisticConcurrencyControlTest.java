@@ -3,6 +3,7 @@ package org.hibernate.tutorials;
 import org.hibernate.tutorials.model.DeliveryRequest;
 import org.hibernate.tutorials.model.Order;
 import org.hibernate.tutorials.model.RequestStatus;
+import org.hibernate.tutorials.model.User;
 import org.hibernate.tutorials.model.inheritance.single_table.BankAccount;
 import org.hibernate.tutorials.model.payments.MonetaryAmount;
 import org.hibernate.utils.CauseRethrowingExecutable;
@@ -15,14 +16,17 @@ import javax.persistence.LockModeType;
 import javax.persistence.OptimisticLockException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
+import static java.math.BigDecimal.valueOf;
 import static org.hibernate.tutorials.model.RequestStatus.CONFIRMED;
 import static org.hibernate.tutorials.model.RequestStatus.DELIVERED;
-import static org.hibernate.utils.Constants.BANK_ACCOUNT_ID;
-import static org.hibernate.utils.Constants.ORDER_ID;
+import static org.hibernate.utils.Constants.*;
+import static org.hibernate.utils.JdbcUtils.GET_LARGEST_ORDER_ID;
 import static org.hibernate.utils.JdbcUtils.GET_REQUESTS_WITH_STATUS;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@SuppressWarnings("CodeBlock2Expr")
 public class OptimisticConcurrencyControlTest extends AbstractDaoTest {
 
     @Test
@@ -70,23 +74,92 @@ public class OptimisticConcurrencyControlTest extends AbstractDaoTest {
     public void shouldThrowExceptionIfEntriesReturnedByQueryInOptimisticLockingModeAreModifiedByAnotherTransaction() {
         List<Long> affectedRequests = getIdsOfConfirmedRequests();
 
-        assertThrows(OptimisticLockException.class,
-                (CauseRethrowingExecutable) () -> hiberUtil.executeInTransaction(entityManager -> {
-                    for (RequestStatus status : RequestStatus.values()) {
-                        List<DeliveryRequest> requests = getRequestsWithOptimisticLock(status, entityManager);
+        assertThrows(OptimisticLockException.class, (CauseRethrowingExecutable) () -> {
+            hiberUtil.executeInTransaction(entityManager -> {
+                for (RequestStatus status : RequestStatus.values()) {
+                    List<DeliveryRequest> requests = getRequestsWithOptimisticLock(status, entityManager);
 
-                        BigDecimal total = BigDecimal.ZERO;
-                        for (DeliveryRequest request : requests) {
-                            MonetaryAmount price = request.getPrice();
-                            BigDecimal value = price.getValue();
-                            total = total.add(value);
+                    BigDecimal total = BigDecimal.ZERO;
+                    for (DeliveryRequest request : requests) {
+                        MonetaryAmount price = request.getPrice();
+                        BigDecimal value = price.getValue();
+                        total = total.add(value);
 
-                            changeConfirmedRequestToDeliveredSoThatTotalPriceIsCalculatedTwice(request);
-                        }
+                        changeConfirmedRequestToDeliveredSoThatTotalPriceIsCalculatedTwice(request);
                     }
-                }));
+                }
+            });
+        });
 
         revertRequestsToConfirmedState(affectedRequests);
+    }
+
+    @Test
+    public void shouldThrowExceptionIfChildAssociationWasModifiedByAnotherTransaction() {
+        assertThrows(OptimisticLockException.class, (CauseRethrowingExecutable) () -> {
+            hiberUtil.executeInTransaction(entityManager -> {
+
+                User user = entityManager.find(User.class, USER_ID,
+                        LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+                Set<Order> orders = user.getOrders();
+
+                meanwhileAddNewOrder();
+
+                long discount = calculateDiscount(orders);
+                Order newOrder = createOrder();
+                billUserForOrder(newOrder, discount);
+
+                user.addOrder(newOrder);
+            });
+        });
+        deleteLastCreatedOrder();
+    }
+
+    private void meanwhileAddNewOrder() {
+        hiberUtil.executeInTransaction(entityManager -> {
+
+            User user = entityManager.find(User.class, USER_ID,
+                    LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+            Set<Order> orders = user.getOrders();
+
+            long discount = calculateDiscount(orders);
+            Order newOrder = createOrder();
+            billUserForOrder(newOrder, discount);
+
+            user.addOrder(newOrder);
+        });
+    }
+
+    private long calculateDiscount(Set<Order> orders) {
+        BigDecimal discount = BigDecimal.ZERO;
+
+        for (int i = 0; i < orders.size(); i++) {
+            discount = discount.add(valueOf(0.00d));
+        }
+
+        return discount.longValue();
+    }
+
+    private Order createOrder() {
+        Order order = new Order();
+        order.setName("Order #562");
+        return order;
+    }
+
+    private void billUserForOrder(Order newOrder, long discount) {
+        //mock implementation
+    }
+
+    private void deleteLastCreatedOrder() {
+        hiberUtil.executeInTransaction(entityManager -> {
+            Long lastGeneratedId = entityManager.createQuery(GET_LARGEST_ORDER_ID, Long.class)
+                    .setMaxResults(1)
+                    .getSingleResult();
+
+            Order lastOrder = entityManager.find(Order.class, lastGeneratedId);
+
+            entityManager.remove(lastOrder);
+        });
     }
 
     private List<Long> getIdsOfConfirmedRequests() {
