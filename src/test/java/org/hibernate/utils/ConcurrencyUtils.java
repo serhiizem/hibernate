@@ -1,5 +1,7 @@
 package org.hibernate.utils;
 
+import lombok.SneakyThrows;
+
 import java.util.concurrent.*;
 
 public class ConcurrencyUtils {
@@ -9,6 +11,12 @@ public class ConcurrencyUtils {
         t.setName("Test");
         return t;
     });
+
+    @SneakyThrows
+    @SuppressWarnings("UnusedReturnValue")
+    public <T> T waitForFutureResult(Future<T> future, TimeUnit timeUnit, long amount) throws TimeoutException {
+        return future.get(amount, timeUnit);
+    }
 
     public void executeSync(VoidCallable callable) {
         try {
@@ -25,5 +33,10 @@ public class ConcurrencyUtils {
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @SneakyThrows
+    public void wait(TimeUnit unit, long amount) {
+        unit.sleep(amount);
     }
 }

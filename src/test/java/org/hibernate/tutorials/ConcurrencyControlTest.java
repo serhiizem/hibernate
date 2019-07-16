@@ -33,7 +33,7 @@ import static org.hibernate.utils.JdbcUtils.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("CodeBlock2Expr")
-public class OptimisticConcurrencyControlTest extends AbstractDaoTest {
+public class ConcurrencyControlTest extends AbstractDaoTest {
 
     @Test
     public void shouldThrowExceptionIfTimestampOfCurrentlyUpdatingOrderDoesNotMatch() {
