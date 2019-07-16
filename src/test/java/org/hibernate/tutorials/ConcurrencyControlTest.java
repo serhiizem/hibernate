@@ -144,7 +144,7 @@ public class ConcurrencyControlTest extends AbstractDaoTest {
 
         try {
             concurrencyUtils.waitForFutureResult(waitingRequest, SECONDS, 2);
-        } catch (TimeoutException e) {
+        } catch (TimeoutException e) { //postgres does not support hint 'java.persistence.lock.timeout'
             slowRequest.cancel(true);
             throw new PessimisticLockException("Failed to execute read in predefined amount of time");
         }
