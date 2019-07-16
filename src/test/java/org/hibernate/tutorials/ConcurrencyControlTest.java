@@ -1,5 +1,6 @@
 package org.hibernate.tutorials;
 
+import lombok.SneakyThrows;
 import org.hibernate.tutorials.model.DeliveryRequest;
 import org.hibernate.tutorials.model.Order;
 import org.hibernate.tutorials.model.RequestStatus;
@@ -14,16 +15,21 @@ import org.springframework.test.annotation.Commit;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.OptimisticLockException;
+import javax.persistence.PessimisticLockException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeoutException;
 
 import static java.math.BigDecimal.valueOf;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hibernate.tutorials.model.RequestStatus.CONFIRMED;
 import static org.hibernate.tutorials.model.RequestStatus.DELIVERED;
 import static org.hibernate.utils.Constants.*;
-import static org.hibernate.utils.JdbcUtils.GET_LARGEST_ORDER_ID;
-import static org.hibernate.utils.JdbcUtils.GET_REQUESTS_WITH_STATUS;
+import static org.hibernate.utils.JdbcUtils.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("CodeBlock2Expr")
@@ -115,6 +121,48 @@ public class OptimisticConcurrencyControlTest extends AbstractDaoTest {
         deleteLastCreatedOrder();
     }
 
+    private ExecutorService service = Executors.newCachedThreadPool();
+
+    @Commit
+    @Test(expected = PessimisticLockException.class)
+    public void shouldWaitUntilThreadInPessimisticWriteModeFinishesExecution() {
+        List<Long> affectedRequests = getIdsOfConfirmedRequests();
+
+        Future<?> slowRequest = service.submit(() -> {
+            verySlowlyGetRequestsWithStatus(CONFIRMED);
+        });
+
+        Future<?> waitingRequest = service.submit(() -> {
+            hiberUtil.executeInTransaction(entityManager -> {
+                concurrencyUtils.wait(SECONDS, 1); //needed for slow request to obtain lock
+                entityManager.createQuery(GET_REQUESTS_WITH_STATUS, DeliveryRequest.class)
+                        .setLockMode(LockModeType.PESSIMISTIC_READ)
+                        .setParameter("status", CONFIRMED)
+                        .getResultList();
+            });
+        });
+
+        try {
+            concurrencyUtils.waitForFutureResult(waitingRequest, SECONDS, 2);
+        } catch (TimeoutException e) {
+            slowRequest.cancel(true);
+            throw new PessimisticLockException("Failed to execute read in predefined amount of time");
+        }
+
+        revertRequestsToConfirmedState(affectedRequests);
+    }
+
+    @SneakyThrows
+    private void verySlowlyGetRequestsWithStatus(@SuppressWarnings("SameParameterValue") RequestStatus status) {
+        hiberUtil.executeInTransaction(entityManager -> {
+            entityManager.createQuery(
+                    VERY_SLOW_GET_REQUESTS_WITH_STATUS, DeliveryRequest.class)
+                    .setParameter("status", status)
+                    .setLockMode(LockModeType.PESSIMISTIC_WRITE)
+                    .getResultList();
+        });
+    }
+
     private void meanwhileAddNewOrder() {
         hiberUtil.executeInTransaction(entityManager -> {
 
@@ -190,7 +238,7 @@ public class OptimisticConcurrencyControlTest extends AbstractDaoTest {
                 .getResultList();
     }
 
-    private void changeRequestStatus(Long requestId, RequestStatus newStatus) {
+    private void changeRequestStatus(Long requestId, @SuppressWarnings("SameParameterValue") RequestStatus newStatus) {
         hiberUtil.executeInTransaction(entityManager -> {
             DeliveryRequest dr = entityManager.find(DeliveryRequest.class, requestId);
             dr.setStatus(newStatus);
