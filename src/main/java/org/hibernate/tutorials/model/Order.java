@@ -41,13 +41,6 @@ public class Order extends PersistentEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User user;
 
-    public Order(Order order) {
-        super(order.getId());
-        this.version = order.getVersion();
-        this.name = order.getName();
-        this.orderImages = order.getOrderImages();
-    }
-
     @Override
     public boolean equals(Object other) {
         if (this == other) return true;

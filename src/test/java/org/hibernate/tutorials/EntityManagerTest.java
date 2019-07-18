@@ -1,6 +1,5 @@
 package org.hibernate.tutorials;
 
-import org.hibernate.LazyInitializationException;
 import org.hibernate.Session;
 import org.hibernate.annotations.QueryHints;
 import org.hibernate.exception.ConstraintViolationException;
@@ -38,16 +37,6 @@ public class EntityManagerTest extends AbstractDaoTest {
         DeliveryRequest deliveryRequest2 = em.find(DeliveryRequest.class, REQUEST_ID);
 
         assertSame(deliveryRequest1, deliveryRequest2);
-    }
-
-
-    @Test(expected = LazyInitializationException.class)
-    public void shouldThrowLazyInitializationExceptionIfProxyIsNotInitializedDuringUnitOfWork() {
-        DeliveryRequest dr = hiberUtil.executeInTransactionAndReturnResult(entityManager ->
-                entityManager.getReference(DeliveryRequest.class, REQUEST_ID));
-
-        //noinspection ResultOfMethodCallIgnored
-        dr.getCreationDate();
     }
 
     @Test

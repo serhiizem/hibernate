@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static javax.persistence.Persistence.getPersistenceUtil;
 import static org.hibernate.utils.Constants.BANK_ACCOUNT_ID;
 import static org.hibernate.utils.RevertStrategy.HIBERNATE;
 import static org.hibernate.utils.RevertStrategy.JDBC;
@@ -26,6 +27,14 @@ public class HibernateUtil {
     public static <T> List<T> getAndCast(List list) {
         //noinspection unchecked
         return (List<T>) list;
+    }
+
+    public <T> boolean isLoaded(T object) {
+        return getPersistenceUtil().isLoaded(object);
+    }
+
+    public <T> boolean isLoaded(T object, String propertyName) {
+        return getPersistenceUtil().isLoaded(object, propertyName);
     }
 
     public void updateBankNameInSeparateTransaction() {
