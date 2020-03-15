@@ -34,6 +34,7 @@ public class Constants {
                     DEFAULT_FROM_ADDRESS, DEFAULT_DELIVERY_ADDRESS, PRICE, DEFAULT_DIMENSIONS, DEFAULT_WEIGHT);
 
     public static final Long REQUEST_ID = 1179L;
+    public static final Long BILL_ID = 1200L;
     public static final Long USER_ID = 1L;
     public static final Long ORDER_ID = 1L;
     public static final Long BANK_ACCOUNT_ID = 1L;

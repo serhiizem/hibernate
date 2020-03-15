@@ -24,7 +24,7 @@ public class HibernateUtil {
     private EntityManagerFactory emf;
     private JdbcTemplate jdbcTemplate;
 
-    public static <T> List<T> getAndCast(List list) {
+    public static <T> List<T> getAndCast(List<?> list) {
         //noinspection unchecked
         return (List<T>) list;
     }

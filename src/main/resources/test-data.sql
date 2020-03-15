@@ -117,6 +117,9 @@ VALUES (3, 'SKYPE', 'test4skype');
 INSERT INTO user_contracts (user_id, generation_date, signing_date, file_extension, file_name)
 VALUES (1, TIMESTAMP '2019-03-16 07:25:59', TIMESTAMP '2019-03-16 09:35:21', 'doc', 'contract112234');
 
+INSERT INTO bills (id, amount, title) VALUES (1200, '178.70', 'Bill #16361');
+INSERT INTO bills (id, amount, title) VALUES (1201, '276.55', 'Bill #58352');
+
 
 
 
